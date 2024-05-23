@@ -1,0 +1,37 @@
+name: CI
+
+    on:
+      push:
+        branches:
+          - main
+      pull_request:
+        types: [opened, reopened, ready_for_review]
+        branches:
+          - main
+    
+    permissions:
+      id-token: write
+      contents: read
+    jobs:
+     
+      deploy_build_main:
+        # needs: [test]
+        if: |
+          (github.ref == 'refs/heads/main')
+        runs-on: ubuntu-latest
+        steps:
+        - name: Checkout repository
+          uses: actions/checkout@v2
+    
+        - name: Install SleakOps CLI
+          run: pip install sleakops
+    
+        - name: Run SleakOps build
+          env:
+            SLEAKOPS_KEY: ${{ secrets.SLEAKOPS_KEY }}
+          run: sleakops build -p django-celery-example -b main -w
+    
+        - name: Run SleakOps deploy
+          env:
+            SLEAKOPS_KEY: ${{ secrets.SLEAKOPS_KEY }}
+          run: sleakops deploy -p django-celery-example -e qa -w

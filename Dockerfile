@@ -39,8 +39,6 @@ RUN set -x \
   # clean tmp dir
   && rm -rf /tmp/*
 
-RUN pip install -r /tmp/requirements/local.txt
-
 COPY . .
 
 CMD [ "python","manage.py","runserver","0.0.0.0:8000" ]
