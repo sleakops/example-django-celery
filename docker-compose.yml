@@ -1,0 +1,92 @@
+version: "3.3"
+services:
+  db:
+    image: postgres:14.1
+    env_file: .env
+    container_name: django-example-db
+    environment:
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=${DB_NAME}
+    ports:
+      - ${DB_PORT}:${DB_PORT}
+    volumes:
+      - db:/var/lib/postgresql/data
+
+  # cache:
+  #   image: redis:7.0.0-alpine
+  #   restart: always
+
+  broker:
+    image: rabbitmq:3-management # AWS MQ, SQS
+    restart: always
+    container_name: django-example-broker
+    environment:
+      - RABBITMQ_DEFAULT_USER=admin
+      - RABBITMQ_DEFAULT_PASS=admin
+      - RABBITMQ_DEFAULT_VHOST=vhost
+    ports:
+        - 5672:5672
+        - 15672:15672
+
+  core:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        ENVIRONMENT: local
+    image: django-example/core
+    command: ./docker-entrypoint.sh
+    container_name: django-example-core
+    env_file: .env
+    stdin_open: true
+    tty: true
+    depends_on:
+      - db
+      - broker
+      # - cache
+    volumes:
+      - .:/app
+    ports:
+      - "8000:8000"
+
+  celeryworker:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        ENVIRONMENT: local
+    image: django-example/core
+    container_name: django-example-celeryworker
+    platform: linux/x86_64
+    volumes:
+      - .:/app:z
+    env_file:
+      - .env
+    depends_on:
+      - db
+      - broker
+      # - cache
+    command: celery -A core.celery worker -l INFO --concurrency 1 --max-tasks-per-child 1 --prefetch-multiplier 1 -n celery@%h
+
+  flower:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        ENVIRONMENT: local
+    image: django-example/core
+    container_name: django-example-flower
+    platform: linux/x86_64
+    volumes:
+      - .:/app:z
+    env_file:
+      - .env
+    ports:
+      - "5555:5555"
+    command: celery -A core.celery flower
+ 
+
+volumes:
+  db: {}
+  # cache: {}
