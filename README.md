@@ -15,3 +15,9 @@ The Makefile contains a few helpers to make your life easier. Run `make help` to
 - Backend Core admin app: http://localhost:8000/admin/
 - Celery monitoring: http://localhost:5555
 
+## To intrument with opentelemetry 
+
+https://opentelemetry-python.readthedocs.io/en/latest/examples/django/README.html
+
+
+Configure pyton agent https://opentelemetry.io/docs/languages/python/automatic/#configuring-the-agent
