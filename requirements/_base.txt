@@ -12,3 +12,10 @@ django-storages==1.14.2 # Manejar archivos estaticos y media en un bucket de AWS
 psycopg2==2.9.9 # Conexion con Postgres
 
 
+opentelemetry-api==1.24.0
+opentelemetry-instrumentation==0.45b0
+opentelemetry-instrumentation-django==0.45b0
+opentelemetry-instrumentation-wsgi==0.45b0
+opentelemetry-sdk==1.24.0
+opentelemetry-semantic-conventions==0.45b0
+opentelemetry-util-http==0.45b0
