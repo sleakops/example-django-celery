@@ -1,9 +1,4 @@
 # pylint: skip-file
-
-import sentry_sdk
-from sentry_sdk.integrations.celery import CeleryIntegration
-from sentry_sdk.integrations.django import DjangoIntegration
-
 from .base import *  # noqa
 from .base import env
 
@@ -48,9 +43,11 @@ AWS_SES_SECRET_ACCESS_KEY = env("DJANGO_AWS_SECRET_ACCESS_KEY", default=None)
 # STORAGES
 # ------------------------------------------------------------------------------
 # https://django-storages.readthedocs.io/en/latest/backends/amazon-S3.html#settings
-AWS_ACCESS_KEY_ID = env("DJANGO_AWS_ACCESS_KEY_ID", default=None)
-AWS_SECRET_ACCESS_KEY = env("DJANGO_AWS_SECRET_ACCESS_KEY", default=None)
-AWS_STORAGE_BUCKET_NAME = env("DJANGO_AWS_STORAGE_BUCKET_NAME")
+
+AWS_STORAGE_BUCKET_NAME = env("DJANGO_AWS_STORAGE_BUCKET_NAME", default=None)
+# We dont need access key . The instance we use in Sleakops already access to the buckets
+# AWS_ACCESS_KEY_ID = env("DJANGO_AWS_ACCESS_KEY_ID", default=None)
+# AWS_SECRET_ACCESS_KEY = env("DJANGO_AWS_SECRET_ACCESS_KEY", default=None)
 
 # https://django-storages.readthedocs.io/en/latest/backends/amazon-S3.html#cloudfront
 # AWS_S3_CUSTOM_DOMAIN = env("DJANGO_AWS_S3_CUSTOM_DOMAIN", default=None)
@@ -64,3 +61,21 @@ STATICFILES_STORAGE = "storages.backends.s3boto3.S3StaticStorage"
 # ------------------------------------------------------------------------------
 DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
 
+
+
+#
+# Sentry
+# -------------------------------------------------------------------------------
+# import sentry_sdk
+# from sentry_sdk.integrations.celery import CeleryIntegration
+# from sentry_sdk.integrations.django import DjangoIntegration
+# SENTRY_DSN = env("SENTRY_DSN", None)
+# sentry_sdk.init(
+#     dsn=SENTRY_DSN,
+#     integrations=[DjangoIntegration(), CeleryIntegration()],
+#     environment=ENVIRONMENT,  # noqa
+#     traces_sample_rate=env.float("SENTRY_TRACES_SAMPLE_RATE", default=0.0),
+#     # If you wish to associate users to errors (assuming you are using
+#     # django.contrib.auth) you may enable sending PII data.
+#     send_default_pii=True,
+# )

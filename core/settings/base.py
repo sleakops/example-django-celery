@@ -30,7 +30,7 @@ APPS_DIR = ROOT_DIR / "apps"
 SECRET_KEY = env("DJANGO_SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = env.bool("DJANGO_DEBUG", False)
+DEBUG = env.bool("DJANGO_DEBUG", default=False)
 
 ENVIRONMENT = env("ENVIRONMENT")
 
