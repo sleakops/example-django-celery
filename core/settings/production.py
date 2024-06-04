@@ -2,13 +2,6 @@
 from .base import *  # noqa
 from .base import env
 
-# GENERAL
-# ------------------------------------------------------------------------------
-
-
-# https://docs.djangoproject.com/en/dev/ref/settings/#allowed-hosts
-ALLOWED_HOSTS = env.list("DJANGO_ALLOWED_HOSTS", default=[])
-
 
 # SECURITY
 # ------------------------------------------------------------------------------
@@ -53,9 +46,9 @@ AWS_STORAGE_BUCKET_NAME = env("DJANGO_AWS_STORAGE_BUCKET_NAME", default="")
 
 # STATIC
 # ------------------------
-STATICFILES_STORAGE = "storages.backends.s3boto3.S3StaticStorage"
+STATICFILES_STORAGE = env("DJANGO_STATIC_STORAGE", default="storages.backends.s3boto3.S3StaticStorage")
 
 # MEDIA
 # ------------------------------------------------------------------------------
-DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
+DEFAULT_FILE_STORAGE = env("DJANGO_MEDIA_STORAGE", default="storages.backends.s3boto3.S3Boto3Storage")
 
