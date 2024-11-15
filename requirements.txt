@@ -12,3 +12,4 @@ django-storages==1.14.2 # Manejar archivos estaticos y media en un bucket de AWS
 psycopg2==2.9.9 # Conexion con Postgres
 
 gunicorn==20.1.0  # servidor python productivo
+django-debug-toolbar==4.2.0
