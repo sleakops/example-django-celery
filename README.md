@@ -21,3 +21,4 @@ The Makefile contains a few helpers to make your life easier. Run `make help` to
 port: 8000
 path: /healthcheck/
 status code: 200
+.
