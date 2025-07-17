@@ -11,7 +11,6 @@ SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 SESSION_COOKIE_SECURE = False
 # https://docs.djangoproject.com/en/dev/ref/settings/#csrf-cookie-secure
 CSRF_COOKIE_SECURE = False
-CSRF_TRUSTED_ORIGINS = ["*"]
 # https://docs.djangoproject.com/en/dev/topics/security/#ssl-https
 # https://docs.djangoproject.com/en/dev/ref/settings/#secure-hsts-seconds
 # TODO: set this to 60 seconds first and then to 518400 once you prove the former works
@@ -31,8 +30,6 @@ SECURE_CONTENT_TYPE_NOSNIFF = env.bool(
 #  ------------------------------------------------------------------------------
 # https://github.com/django-ses/django-ses#readme
 EMAIL_BACKEND = env("EMAIL_BACKEND", default="django_ses.SESBackend")
-AWS_SES_ACCESS_KEY_ID = env("DJANGO_AWS_ACCESS_KEY_ID", default=None)
-AWS_SES_SECRET_ACCESS_KEY = env("DJANGO_AWS_SECRET_ACCESS_KEY", default=None)
 
 # STORAGES
 # ------------------------------------------------------------------------------
