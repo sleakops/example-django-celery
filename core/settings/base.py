@@ -134,6 +134,13 @@ USE_I18N = True
 
 USE_TZ = True
 
+# Celery
+CELERY_BROKER_URL = env.str("CELERY_BROKER_URL")
+CELERY_RESULT_BACKEND = env.str("CELERY_RESULT_BACKEND")
+CELERY_WORKER_PREFETCH_MULTIPLIER = env.int(
+    "CELERY_WORKER_PREFETCH_MULTIPLIER", default=1
+)
+CELERY_RESULT_EXTENDED = env.bool("CELERY_RESULT_EXTENDED", default=False)
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
