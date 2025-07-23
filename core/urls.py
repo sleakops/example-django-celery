@@ -36,7 +36,7 @@ urlpatterns = [
 
 
 # Static file serving when using Gunicorn + Uvicorn for local web socket development
-if settings.DEBUG:
+if settings.LOAD_STATIC_AND_MEDIA:
     urlpatterns += staticfiles_urlpatterns()
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

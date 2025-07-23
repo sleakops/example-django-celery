@@ -164,3 +164,6 @@ LOGOUT_REDIRECT_URL = "home"        # adónde después de logout
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 
 CRISPY_TEMPLATE_PACK = "bootstrap5"
+
+
+LOAD_STATIC_AND_MEDIA=env.bool("DJANGO_LOAD_STATIC_AND_MEDIA", default=True)
