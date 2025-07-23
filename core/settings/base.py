@@ -167,3 +167,6 @@ CRISPY_TEMPLATE_PACK = "bootstrap5"
 
 
 LOAD_STATIC_AND_MEDIA=env.bool("DJANGO_LOAD_STATIC_AND_MEDIA", default=True)
+
+
+ADMIN_ENABLED = env.bool("ADMIN_ENABLED", default=True)

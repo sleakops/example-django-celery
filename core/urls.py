@@ -27,12 +27,17 @@ def healthcheck(request):
 urlpatterns = [
     path("", HomeView.as_view(), name="home"),
     path("healthcheck/", healthcheck),
-    path('admin/', admin.site.urls),
     path("", include("apps.user.urls")),
     path("", include("apps.cart.urls")),
     path("", include("apps.order.urls")),
     path("", include("apps.product.urls")),
 ]
+
+# Admin URL configuration
+if settings.ADMIN_ENABLED:
+    urlpatterns += [
+        path("admin/", admin.site.urls),
+    ]
 
 
 # Static file serving when using Gunicorn + Uvicorn for local web socket development
