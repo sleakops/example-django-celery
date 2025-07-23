@@ -1,0 +1,126 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Inicio{% endblock %}
+{% block extra_css %}
+<style>
+  .category-card img { height: 120px; object-fit: cover; }
+  .product-card img { height: 180px; object-fit: cover; }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<!-- HERO / BANNER -->
+<div id="mainHero" class="carousel slide mb-5" data-bs-ride="carousel">
+  <div class="carousel-inner">
+    <div class="carousel-item active">
+      <img src="https://demo-sleakops-ecomerce.s3.us-east-1.amazonaws.com/banner_tv.png" class="d-block w-100" alt="Promo TV">
+      <div class="carousel-caption d-none d-md-block">
+        <h5>Smart TVs 4K con 30% OFF</h5>
+        <p>Última generación en imagen y sonido.</p>
+        <a href="{% url 'product_list' %}" class="btn btn-light btn-sm">Ver ofertas</a>
+      </div>
+    </div>
+    <div class="carousel-item">
+      <img src="https://demo-sleakops-ecomerce.s3.us-east-1.amazonaws.com/banner_notebook.png" class="d-block w-100" alt="Promo Notebooks">
+      <div class="carousel-caption d-none d-md-block">
+        <h5>Notebooks para estudio y gaming</h5>
+        <p>12 cuotas sin interés + envío gratis.</p>
+        <a href="{% url 'product_list' %}" class="btn btn-light btn-sm">Comprar ahora</a>
+      </div>
+    </div>
+    <div class="carousel-item">
+      <img src="https://demo-sleakops-ecomerce.s3.us-east-1.amazonaws.com/banner_celulares.png" class="d-block w-100" alt="Promo Celulares">
+      <div class="carousel-caption d-none d-md-block">
+        <h5>Celulares al mejor precio</h5>
+        <p>Marcas líderes y lanzamientos recientes.</p>
+        <a href="{% url 'product_list' %}" class="btn btn-light btn-sm">Ver catálogo</a>
+      </div>
+    </div>
+  </div>
+  <button class="carousel-control-prev" type="button" data-bs-target="#mainHero" data-bs-slide="prev">
+    <span class="carousel-control-prev-icon"></span>
+  </button>
+  <button class="carousel-control-next" type="button" data-bs-target="#mainHero" data-bs-slide="next">
+    <span class="carousel-control-next-icon"></span>
+  </button>
+</div>
+
+<!-- CATEGORÍAS -->
+<section class="mb-5">
+  <h2 class="mb-4">Categorías</h2>
+  <div class="row g-4">
+    <div class="col-12 col-md-4">
+      <div class="card category-card shadow-sm">
+        <img src="https://demo-sleakops-ecomerce.s3.us-east-1.amazonaws.com/category_phones.png" class="card-img-top" alt="Celulares">
+        <div class="card-body text-center">
+          <h5 class="card-title">Celulares</h5>
+          <a href="{% url 'product_list' %}?category=celulares" class="btn btn-primary btn-sm">Ver</a>
+        </div>
+      </div>
+    </div>
+    <div class="col-12 col-md-4">
+      <div class="card category-card shadow-sm">
+        <img src="https://demo-sleakops-ecomerce.s3.us-east-1.amazonaws.com/category_notebook.png" class="card-img-top" alt="Notebooks">
+        <div class="card-body text-center">
+          <h5 class="card-title">Notebooks</h5>
+          <a href="{% url 'product_list' %}?category=notebooks" class="btn btn-primary btn-sm">Ver</a>
+        </div>
+      </div>
+    </div>
+    <div class="col-12 col-md-4">
+      <div class="card category-card shadow-sm">
+        <img src="https://demo-sleakops-ecomerce.s3.us-east-1.amazonaws.com/category_tv.png" class="card-img-top" alt="TVs">
+        <div class="card-body text-center">
+          <h5 class="card-title">TVs</h5>
+          <a href="{% url 'product_list' %}?category=tv" class="btn btn-primary btn-sm">Ver</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRODUCTOS DESTACADOS (FAKE DATA) -->
+<section class="mb-5">
+  <h2 class="mb-4">Destacados de la semana</h2>
+  <div class="row g-4">
+
+    {% for product in products %}
+
+    <div class="col-12 col-sm-6 col-lg-3">
+      <div class="card product-card h-100 shadow-sm">
+        <img src="{{ product.image_url }}" class="card-img-top" alt="Samsung S23">
+        <div class="card-body d-flex flex-column">
+          <h6 class="card-title mb-1">{{ product.name }}</h6>
+          <p class="text-muted mb-2">general description</p>
+          <p class="fw-bold mb-3">$ {{ product.price }}</p>
+          <a href="{% url 'product_detail' product.id %}" class="btn btn-primary mt-auto btn-sm">Ver detalle</a>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</section>
+
+<!-- BENEFICIOS -->
+<section class="bg-light p-4 rounded shadow-sm">
+  <div class="row text-center g-4">
+    <div class="col-12 col-md-4">
+      <i class="bi bi-truck fs-1 d-block mb-2"></i>
+      <h6>Envío gratis</h6>
+      <p class="small text-muted">En compras superiores a $100.000</p>
+    </div>
+    <div class="col-12 col-md-4">
+      <i class="bi bi-credit-card fs-1 d-block mb-2"></i>
+      <h6>12 cuotas sin interés</h6>
+      <p class="small text-muted">Con todas las tarjetas</p>
+    </div>
+    <div class="col-12 col-md-4">
+      <i class="bi bi-shield-check fs-1 d-block mb-2"></i>
+      <h6>Garantía oficial</h6>
+      <p class="small text-muted">Productos 100% originales</p>
+    </div>
+  </div>
+</section>
+
+{% endblock %}

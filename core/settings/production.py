@@ -31,20 +31,23 @@ SECURE_CONTENT_TYPE_NOSNIFF = env.bool(
 # https://github.com/django-ses/django-ses#readme
 EMAIL_BACKEND = env("EMAIL_BACKEND", default="django_ses.SESBackend")
 
-# STORAGES
-# ------------------------------------------------------------------------------
-# https://django-storages.readthedocs.io/en/latest/backends/amazon-S3.html#settings
-AWS_STORAGE_BUCKET_NAME = env("DJANGO_AWS_STORAGE_BUCKET_NAME", default="")
 
-# https://django-storages.readthedocs.io/en/latest/backends/amazon-S3.html#cloudfront
-# AWS_S3_CUSTOM_DOMAIN = env("DJANGO_AWS_S3_CUSTOM_DOMAIN", default=None)
-# aws_s3_domain = AWS_S3_CUSTOM_DOMAIN or f"{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com"
+AWS_STORAGE_ENABLED = env.bool("DJANGO_AWS_STORAGE_ENABLED", default=False)
 
-# STATIC
-# ------------------------
-STATICFILES_STORAGE = env("DJANGO_STATIC_STORAGE", default="storages.backends.s3boto3.S3StaticStorage")
+if AWS_STORAGE_ENABLED:
+    # STORAGES
+    # ------------------------------------------------------------------------------
+    # https://django-storages.readthedocs.io/en/latest/backends/amazon-S3.html#settings
+    AWS_STORAGE_BUCKET_NAME = env("DJANGO_AWS_STORAGE_BUCKET_NAME", default="")
 
-# MEDIA
-# ------------------------------------------------------------------------------
-DEFAULT_FILE_STORAGE = env("DJANGO_MEDIA_STORAGE", default="storages.backends.s3boto3.S3Boto3Storage")
+    # https://django-storages.readthedocs.io/en/latest/backends/amazon-S3.html#cloudfront
+    # AWS_S3_CUSTOM_DOMAIN = env("DJANGO_AWS_S3_CUSTOM_DOMAIN", default=None)
+    # aws_s3_domain = AWS_S3_CUSTOM_DOMAIN or f"{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com"
+
+    # STATIC
+    # ------------------------
+    STATICFILES_STORAGE = env("DJANGO_STATIC_STORAGE", default="storages.backends.s3boto3.S3StaticStorage")
+    # MEDIA
+    # ------------------------------------------------------------------------------
+    DEFAULT_FILE_STORAGE = env("DJANGO_MEDIA_STORAGE", default="storages.backends.s3boto3.S3Boto3Storage")
 

@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% block title %}Checkout{% endblock %}
+
+{% block content %}
+  <h2>Checkout</h2>
+
+  <section>
+    <h3>Resumen del carrito</h3>
+    <ul class="cart-list">
+      {% for item in request.user.cart.items.all %}
+        <li class="cart-item">
+          <span>{{ item.product.name }} (x{{ item.quantity }})</span>
+          <span>${{ item.get_total_price }}</span>
+        </li>
+      {% endfor %}
+    </ul>
+    <p class="total-row"><strong>Total:</strong> ${{ total }}</p>
+  </section>
+
+  <section style="margin-top:2rem;">
+    <h3>Datos de facturación / envío</h3>
+    <form method="post">
+      {% csrf_token %}
+      {{ form|crispy }}
+      <button type="submit">Confirmar y pagar</button>
+    </form>
+  </section>
+{% endblock %}

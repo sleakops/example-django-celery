@@ -1,0 +1,507 @@
+[
+{
+    "model": "order.orderitem",
+    "pk": 1,
+    "fields": {
+        "order": 1,
+        "product": 4,
+        "quantity": 1,
+        "unit_price": "3000.00"
+    }
+},
+{
+    "model": "order.orderitem",
+    "pk": 2,
+    "fields": {
+        "order": 1,
+        "product": 9,
+        "quantity": 2,
+        "unit_price": "4500.00"
+    }
+},
+{
+    "model": "order.orderitem",
+    "pk": 3,
+    "fields": {
+        "order": 2,
+        "product": 11,
+        "quantity": 1,
+        "unit_price": "3455.00"
+    }
+},
+{
+    "model": "order.orderitem",
+    "pk": 4,
+    "fields": {
+        "order": 3,
+        "product": 10,
+        "quantity": 1,
+        "unit_price": "5000.00"
+    }
+},
+{
+    "model": "order.orderitem",
+    "pk": 5,
+    "fields": {
+        "order": 4,
+        "product": 4,
+        "quantity": 1,
+        "unit_price": "600.00"
+    }
+},
+{
+    "model": "order.orderitem",
+    "pk": 6,
+    "fields": {
+        "order": 5,
+        "product": 13,
+        "quantity": 3,
+        "unit_price": "4200.00"
+    }
+},
+{
+    "model": "order.orderitem",
+    "pk": 7,
+    "fields": {
+        "order": 6,
+        "product": 12,
+        "quantity": 2,
+        "unit_price": "4100.00"
+    }
+},
+{
+    "model": "order.orderitem",
+    "pk": 8,
+    "fields": {
+        "order": 6,
+        "product": 7,
+        "quantity": 1,
+        "unit_price": "1200.00"
+    }
+},
+{
+    "model": "order.orderitem",
+    "pk": 9,
+    "fields": {
+        "order": 7,
+        "product": 10,
+        "quantity": 1,
+        "unit_price": "2020.00"
+    }
+},
+{
+    "model": "order.orderitem",
+    "pk": 10,
+    "fields": {
+        "order": 8,
+        "product": 6,
+        "quantity": 2,
+        "unit_price": "2099.99"
+    }
+},
+{
+    "model": "payment.payment",
+    "pk": 1,
+    "fields": {
+        "order": 8,
+        "amount": "4199.98",
+        "paid_at": "2025-07-23T02:04:30.747Z",
+        "payment_method": "card"
+    }
+},
+{
+    "model": "product.product",
+    "pk": 4,
+    "fields": {
+        "category": 1,
+        "name": "Motorola Edge 50 256GB Koala Grey",
+        "description": "Diseño\r\nDisfrutá de un teléfono ultradelgado y liviano con terminación en cuero vegano o gamuza vegana. Su certificación militar MIL-810H6 y protección IP681 te brindará tranquilidad en cada uso.\r\n\r\nRendimiento\r\nLiberá tu creatividad con la plataforma Snapdragon® 7 Gen 1 Accelerated Edition, 256 GB de espacio de almacenamiento y 12 GB de RAM. Esta combinación asegura que tu dispositivo pueda manejar juegos exigentes, aplicaciones intensivas y tareas multitarea sin esfuerzo, brindándote una experiencia fluida y sin retrasos.\r\n\r\nBatería\r\nCon una capacidad de 5000 mAh, el Motorola Edge 50 te garantiza energía suficiente para todo el día. Además, gracias al cargador TurboPower de 68W, podrás obtener carga completa en solo 15 minutos.\r\n\r\nCámara\r\nCapturá retratos, fotos y videos nítidos de noche sin importar la distancia gracias al sensor Sony Lytia 700C de la cámara Ultra Pixel de 50 MP. La gran angular y macro de 13 MP te permitirá capturar paisajes amplios y fotos con gran precisión, mientras que con la teleobjetivo de 10 MP podrás hacer zoom sin perder calidad. En la parte frontal, la cámara de 32 MP ofrece selfies claras y brillantes, con detalles perfectos para compartir.\r\n\r\nPantalla\r\nEl celular Motorola Edge 50 cuenta con una impresionante pantalla pOLED de 6.67 pulgadas que ofrece una resolución Super HD. Con una tasa de refresco de 120Hz, disfrutarás de una experiencia visual ultra fluida, ideal para ver videos, jugar y utilizar tus aplicaciones favoritas. Mirá de tus programas y películas con todos los detalles, contraste infinito y colores brillantes que cumplen con los estándares cinematográficos.",
+        "price": "999.99",
+        "stock": 10,
+        "is_active": true,
+        "created_at": "2025-07-22T12:31:43.963Z",
+        "image_url": "https://demo-sleakops-ecomerce.s3.us-east-1.amazonaws.com/phone_moto_edge.png"
+    }
+},
+{
+    "model": "product.product",
+    "pk": 5,
+    "fields": {
+        "category": 1,
+        "name": "Celular Samsung Galaxy S25 256GB Navy",
+        "description": "Diseño\r\nConocé al Galaxy S25. Envuelto en un marco de aluminio ligero y fortalecido con pantalla de vidrio Corning® Gorilla® Glass Victus® 2 para una protección fuerte, este resistente teléfono está diseñado para llevarse prácticamente a cualquier lugar. Incluso cuenta con clasificación IP68, por lo que no solo está sellado para desafiar la humedad, sino que también es resistente al polvo.\r\n\r\nCon diseño resistente y elegante en color Navy, una cámara sofisticada y un agarre más cómodo, el Samsung Galaxy S25 es simple e impactante.\r\n\r\nRendimiento\r\nEl Galaxy S25 cuenta con 256 GB de almacenamiento para que guardes todas tus aplicaciones, fotos y videos sin preocupaciones. Con 12 GB de memoria RAM, garantiza un rendimiento fluido y eficiente, permitiéndote realizar múltiples tareas sin interrupciones.\r\n\r\nBatería\r\nCon una batería de 4000 mAh y la innovadora tecnología mDNIe de Samsung, integrada en la optimización de software y AP personalizados, el S25 está diseñado para mantenerte conectado durante todo el día. Además, la carga rápida de 25W te permite recargar tu teléfono en poco tiempo, asegurando que siempre estés listo para continuar con tus actividades sin largas esperas.\r\n\r\nCámara\r\nCon las cámaras del celular Samsung Galaxy S25 256 GB Navy podrás revivir cada momento capturado como si estuvieras ahí.\r\n\r\nGracias a su tecnología Object-aware Engine mejorada, la cámara se adapta a distintos entornos de iluminación para reproducir los tonos y texturas de la piel con total precisión. Además, el nuevo ProVisual Engine, impulsado por un potente procesador, te permite capturar, ver y editar imágenes con una calidad sorprendente. También podrás personalizar tus fotos con tus propios filtros personalizados, ajustables en saturación, brillo y más, para que cada imagen refleje tu estilo. \r\n\r\nSu sistema de triple cámara trasera combina una lente principal de 50 MP, un telefoto de 10 MP y una ultraancha de 12 MP, para que tengas fotografías detalladas y con una increíble profundidad. En la parte frontal, la cámara de 12 MP te garantiza selfies nítidas y videollamadas con gran claridad.\r\n\r\nPantalla\r\nEl celular Galaxy S25 cuenta con una impresionante pantalla FHD+ de 6,2 pulgadas. Ofreciendo imágenes nítidas y vibrantes, disfrutarás de tus contenidos favoritos con la mejor resolución y fluidez, gracias a la tasa de refresco máxima de 120 Hz. Además, la tecnología Dynamic AMOLED 2X garantiza colores vivos y un contraste excepcional, proporcionando una experiencia visual inmersiva.\r\n\r\nSamsung Knox\r\nEl motor de datos personales combina y procesa tus datos principales y proporciona sugerencias personalizadas. Cifra estos datos y los guarda en tu dispositivo con Knox Vault para que se vuelvan inaccesibles a cualquier otra persona.\r\n\r\nGalaxy AI\r\nRecibí la próxima era de la AI móvil con un compañero de AI que está un paso adelante de todas tus necesidades. Con el Galaxy S25 en tus manos, podrás liberar nuevos niveles de creatividad, productividad y posibilidades; empezando por el dispositivo más importante de tu día: tu teléfono inteligente.\r\n\r\nOne UI\r\nOne UI 7 te permite hacer lo que quieras sin esfuerzo, ahora más que nunca con Galaxy AI. Recargá al máximo tu comunicación, liberá tu creatividad y completá tus tareas. Todo está bajo tu control.",
+        "price": "1799.99",
+        "stock": 65,
+        "is_active": true,
+        "created_at": "2025-07-22T12:35:13.688Z",
+        "image_url": "https://demo-sleakops-ecomerce.s3.us-east-1.amazonaws.com/phone_galaxy_s25.png"
+    }
+},
+{
+    "model": "product.product",
+    "pk": 6,
+    "fields": {
+        "category": 1,
+        "name": "Motorola Razr 60 Ultra 1TB Scarab",
+        "description": "Diseño\r\nPor primera vez en un smartphone, Alcantara® (un material lujoso, suave y 100% italiano) se combina con PANTONE Scarab, un tono inspirado en la exuberancia del bosque, en el Celular Motorola Razr 60 Ultra 1TB Scarab.\r\n\r\nBatería\r\nUsá tu teléfono al máximo durante todo un día con solo 8 minutos de carga y, luego, recargalo para obtener hasta 36 horas de batería con la carga TurboPower™ de 68 W.\r\n\r\nCámara\r\nEl Motorola Razr 60 Ultra posee el primer sistema de cámara triple de 50MP en un teléfono plegable que te permite apuntar y capturar resultados perfectos sin esfuerzo. Además, con Moto AI, lograrás capturar fotos y videos de calidad profesional y disfrutar de un asistente personal.\r\n\r\nDesempeño\r\nCon el procesador Qualcomm® Snapdragon® 8 Elite Mobile Platform el motorola razr 60 ultra es el teléfono plegable más potente del mercado, ofreciendo un rendimiento superior de CPU, GPU y NPU gracias a su motor de procesamiento dedicado a inteligencia artificial. \r\n\r\nPantalla\r\nUtilizá el Motorola Razr 60 Ultra sin necesidad de abrirlo desde su pantalla externa de 4 pulgadas, para ver el clima, consultar notificaciones o ingresar a tus aplicaciones. Luego, abrilo para revelar una pantalla LTPO de 6,9 pulgadas, donde tus juegos y videos cobran vida gracias a la resolución 1.5K y 165 Hz de frecuencia de actualización.\r\n\r\nAlmacenamiento\r\nCon 16GB de memoria RAM, las apps funcionan más rápido y fluido. Además, podrás guardar todo lo que necesitás con hasta 1TB de almacenamiento interno.",
+        "price": "2099.99",
+        "stock": 4,
+        "is_active": true,
+        "created_at": "2025-07-22T12:36:33.224Z",
+        "image_url": "https://demo-sleakops-ecomerce.s3.us-east-1.amazonaws.com/phono_moto_raz.png"
+    }
+},
+{
+    "model": "product.product",
+    "pk": 7,
+    "fields": {
+        "category": 1,
+        "name": "Ulefone Armor 18T Ultra con cámara térmica 256gb",
+        "description": "Ulefone Armor 18T ULTRA 512GB 12GB RAM Resistente 9600mAh Termica\r\n\r\nEl Ulefone Power Armor 18T ULTRA es un smartphone rugged con cámara térmica FLIR y triple certificación de resistencia. Equipado con procesador MediaTek Dimensity 900, 12 GB de RAM y 256 GB de capacidad, presenta una pantalla de 6.58″ FullHD+ con alta tasa de refresco. Cuenta con cámara trasera de 108 Mpx, cámara frontal de 32 Mpx, enorme batería de 9600 mAh con carga rápida y carga inalámbrica. Incluye características como Android 12, NFC, WiFi 6 y es compatible con accesorios USmart.",
+        "price": "1890.00",
+        "stock": 2,
+        "is_active": true,
+        "created_at": "2025-07-22T12:38:20.688Z",
+        "image_url": "https://demo-sleakops-ecomerce.s3.us-east-1.amazonaws.com/phone_lefone.png"
+    }
+},
+{
+    "model": "product.product",
+    "pk": 8,
+    "fields": {
+        "category": 5,
+        "name": "Smart TV Samsung 75'' Neo QLED 4K QN85D",
+        "description": "Pantalla\r\nEl Smart TV Samsung QN85D de 75 pulgadas presenta una impresionante resolución 4K, ofreciendo imágenes nítidas y detalladas. Con una frecuencia de actualización de 120Hz, asegura una visualización fluida y sin interrupciones, ideal para disfrutar de deportes, juegos y contenido de acción rápida.\r\n\r\nLa evolución del Neo QLED avanza con la Quantum Matrix Technology, que controla con precisión nuestros Quantum mini LED patentados. Este control de luz ultrafino y preciso saca a relucir grandes detalles en las escenas más oscuras y brillantes.\r\n\r\nProcesador\r\nEl procesador 4K con tecnología de AI de Samsung crea una de las mejores experiencias 4K. Nuestra tecnología de ampliación de AI 4K impulsada por 20 redes neuronales de AI transforma el contenido en una calidad de imagen casi 4K. Nuestro procesador NQ4 AI Gen2 optimiza tanto la imagen como el sonido para ofrecer una experiencia 4K, ya sea que estés transmitiendo servicios OTT, jugando tus videojuegos favoritos o viendo deportes en vivo.\r\n\r\nSistema Operativo\r\nAprovechá al máximo tu TV con las aplicaciones y servicios más recientes en Samsung Tizen OS. Disfruta de canales de TV en vivo gratuitos y miles de películas con Samsung TV Plus, y de juegos en la nube sin problemas con Gaming Hub. Incluso podés administrar tus actividades diarias con Daily+ y controlar tus dispositivos inteligentes desde tu TV con SmartThings.\r\n\r\nNeo QLED\r\nLa evolución del Neo QLED avanza con la Quantum Matrix Technology, que controla con precisión nuestros Quantum mini LED patentados. Este control de luz ultrafino y preciso saca a relucir grandes detalles en las escenas más oscuras y brillantes.\r\n\r\nInteligencia Artificial\r\nLa tecnología de Mejora de 4k con AI, impulsada por 20 redes neuronales de AI, transforma el contenido en una calidad de imagen casi 4K.",
+        "price": "4369.00",
+        "stock": 3,
+        "is_active": true,
+        "created_at": "2025-07-22T12:40:47.363Z",
+        "image_url": "https://demo-sleakops-ecomerce.s3.us-east-1.amazonaws.com/tv_samsung_75.png"
+    }
+},
+{
+    "model": "product.product",
+    "pk": 9,
+    "fields": {
+        "category": 5,
+        "name": "Smart TV QLED 65” TCL 65C655A",
+        "description": "Disfrutá 4K UHD\r\nEl smart TV TCL 65C655 posee una pantalla QLED de 65 pulgadas y resolución 4K UHD con la que disfrutarás de ver todas tus series, videos y películas favoritas en una gran calidad de imagen. El perfil y el bisel delgado hacen que la TV se vea bien sin importar si está encendida o apagada. Combina funcionalidad y elegancia. Las imágenes de la pantalla cobran vida al contar con un bisel súper estrecho ya que todo su enfoque está en la pantalla, lo que te brinda la mejor experiencia visual.\r\n\r\nConexión inalámbrica sencilla y rápida\r\nMediante sus entradas HDMI, el TCL te permite conectar reproductores de video, consolas de juegos y notebooks. También, gracias a sus puertos USB, lograrás reproducir contenido multimedia (música, fotos, videos) almacenados en dispositivos externos como tablets, smartphones y pendrives.\r\n\r\nGoogle TV\r\nNetflix, YouTube, Amazon Prime Video, Disney +, Spotify y más aplicaciones están disponibles en tu TCL Google TV. Todas las aplicaciones de películas, espectáculos, música, deportes y videos están listas para descargarse desde Google Play Store y con rápido acceso mediante Google Asisstant y control de voz.",
+        "price": "1605.80",
+        "stock": 7,
+        "is_active": true,
+        "created_at": "2025-07-22T12:46:25.049Z",
+        "image_url": "https://demo-sleakops-ecomerce.s3.us-east-1.amazonaws.com/tv_tcl_qled.png"
+    }
+},
+{
+    "model": "product.product",
+    "pk": 10,
+    "fields": {
+        "category": 5,
+        "name": "Smart TV 55” 4K OLED Samsung QN55S90CAGCZB",
+        "description": "Sonido\r\nCon Dolby Atmos, el audio se desplaza en todas las direcciones, creando una sensación de inmersión que rodea al espectador. Además, OTS Lite (Object Tracking Sound Lite) sigue el movimiento de los objetos en pantalla para mejorar aún más la experiencia auditiva y hacer que el sonido sea más realista y envolvente. Por otro lado, gracias a la función Q-Symphony, el smart puede sincronizarse con una barra de sonido compatible de Samsung para optimizar y mejorar la calidad del sonido.\r\n\r\nPantalla\r\nEl smart TV Samsung QN55S90CAGCZB cuenta con una pantalla de 55 pulgadas con tecnología OLED que ofrece negros profundos, blancos limpios y colores llenos de matices gracias a los píxeles autoiluminados de última generación impulsados por Quantum Dot. Su resolución 4K garantiza una calidad de imagen increíblemente detallada, ideal para disfrutar de películas, series y videojuegos con una claridad asombrosa.\r\n\r\nProcesador\r\nEl procesador Neural Quantum Processor 4K utiliza inteligencia artificial para mejorar la calidad de imagen y el rendimiento general. Este potente procesador analiza y optimiza el contenido en tiempo real, mejorando los detalles, los colores y el contraste para ofrecer una experiencia visual impresionante y realista.\r\n\r\nSistema Operativo\r\nEl sistema operativo Tizen proporciona una interfaz intuitiva y fácil de usar. Con Tizen, podrás acceder a una amplia gama de aplicaciones y servicios de streaming, como Netflix, Disney+, YouTube y más, para disfrutar de tus series y películas favoritas.",
+        "price": "3464.00",
+        "stock": 8,
+        "is_active": true,
+        "created_at": "2025-07-22T12:48:00.253Z",
+        "image_url": "https://demo-sleakops-ecomerce.s3.us-east-1.amazonaws.com/tv_samsung_qled.png"
+    }
+},
+{
+    "model": "product.product",
+    "pk": 11,
+    "fields": {
+        "category": 6,
+        "name": "Notebook Samsung Galaxy Book3 Pro Beige",
+        "description": "rocesador\r\nProcesador\r\nIntel® Core™ i5-1340P (1.9 GHz hasta 4.6 GHz, 12 MB Caché L3)\r\nMod. procesador\r\ni5-1340P\r\nVelocidad CPU\r\n1.9 GHz hasta 4.6 GHz\r\nMemoria\r\nDisco rígido\r\nNo posee\r\nDisco SSD\r\n512 GB NVMe (2 ranuras disponibles)\r\nRAM\r\n16 GB\r\nTipo de disco\r\nSSD\r\nSistema Operativo\r\nSoftware Iniciales\r\nGalaxy Book Experience\r\nSistema operativo\r\nWindows 11 Home\r\nImagen\r\nPantalla\r\n14 pulgadas\r\nResolución de pantalla\r\n2880 x 1800 px\r\nPantalla táctil\r\nSí\r\nTecnología de pantalla\r\nAMOLED\r\nPlaca de video\r\nIntel® Iris® Xe Graphics\r\nConectividad\r\nWi-Fi\r\nSí\r\nPuertos usb\r\nSí, versión 5.1\r\nPuerto HDMI\r\n1 x HDMI\r\nBluetooth\r\nSí\r\nDetalles\r\nCamara\r\nSí\r\nTeclado numérico\r\nSí\r\nColor\r\nBeige\r\nDimensiones\r\nMedidas\r\n312.3 x 223.8 x 11.3 mm\r\nPeso\r\n1.17 kg",
+        "price": "3680.00",
+        "stock": 2,
+        "is_active": true,
+        "created_at": "2025-07-22T13:53:04.092Z",
+        "image_url": "https://demo-sleakops-ecomerce.s3.us-east-1.amazonaws.com/notebook_sansumg.png"
+    }
+},
+{
+    "model": "product.product",
+    "pk": 12,
+    "fields": {
+        "category": 6,
+        "name": "Apple MacBook Air 13.6\" M3 8C CPU 8C GPU 16GB 256GB Midnight",
+        "description": "Procesador\r\nProcesador\r\nApple\r\nMod. procesador\r\nM3\r\nVelocidad CPU\r\n8C CPU\r\nMemoria\r\nDisco rígido\r\nNo\r\nDisco SSD\r\nSi\r\nRAM\r\n16 GB\r\nTipo de disco\r\nSSD\r\nSistema Operativo\r\nSistema operativo\r\nMac Os\r\nImagen\r\nPantalla\r\n13.3 pulgadas\r\nResolución de pantalla\r\n2560 x 1600\r\nPantalla táctil\r\nNo\r\nTecnología de pantalla\r\nIPS LCD\r\nPlaca de video\r\nSi\r\nConectividad\r\nWi-Fi\r\nSí\r\nPuertos usb\r\nSi\r\nPuerto HDMI\r\nNo\r\nBluetooth\r\nSí\r\nDetalles\r\nCamara\r\nSí\r\nTeclado numérico\r\nNo\r\nTeclado retroiluminado\r\nSi\r\nColor\r\nMidnight\r\nBatería\r\nBatería\r\nLitio",
+        "price": "3799.00",
+        "stock": 6,
+        "is_active": true,
+        "created_at": "2025-07-22T13:55:28.699Z",
+        "image_url": "https://demo-sleakops-ecomerce.s3.us-east-1.amazonaws.com/notebook_macair.png"
+    }
+},
+{
+    "model": "product.product",
+    "pk": 13,
+    "fields": {
+        "category": 6,
+        "name": "Apple MacBook Pro 14\" M2 Pro 12C CPU 19C GPU 16GB 1TB SpaceGray",
+        "description": "La MacBook Pro de 14 pulgadas con chip M2 Pro es la opción ideal para profesionales que buscan potencia y rendimiento excepcionales. Equipado con el revolucionario chip M2 Pro, ofrece hasta 12 núcleos de CPU y hasta 19 núcleos de GPU, garantizando una velocidad impresionante y un rendimiento sin igual en tareas exigentes como la edición de video, desarrollo de software y diseño gráfico. Su pantalla Liquid Retina XDR proporciona colores vibrantes y detalles precisos, mientras que la batería de larga duración te mantiene productivo durante todo el día. Con una conectividad versátil y puertos como HDMI, Thunderbolt 4 y una tarjeta SDXC, esta MacBook Pro es la herramienta definitiva para quienes necesitan lo mejor de la tecnología Apple.",
+        "price": "4170.00",
+        "stock": 2,
+        "is_active": true,
+        "created_at": "2025-07-22T13:56:33.686Z",
+        "image_url": "https://demo-sleakops-ecomerce.s3.us-east-1.amazonaws.com/notebook_macpro.png"
+    }
+},
+{
+    "model": "product.product",
+    "pk": 14,
+    "fields": {
+        "category": 6,
+        "name": "Notebook Hp Zbook Firefly G11 Core Ultra 7 155h 32gb 1tb Rtx A500 4gb 14 W11p",
+        "description": "Te damos la bienvenida a la Tienda Oficial de HP. Para asegurarnos que tengas la mejor experiencia todos nuestros productos son originales, nuevos y vienen sellados con su respectiva garantía oficial HP. Además, contamos con asesores especializados ante cualquier duda que tengas. --------------------------------------------------------------------------------------------------------------------------- .Características del Sistema Sistema operativo: Windows 11 Pro Procesador: Intel® Core™ Ultra 7 155H (hasta 4,8 GHz, con tecnología Intel® Turbo Boost, 24 MB de caché L3, 16 núcleos y 22 subprocesos) Familia de procesador: Procesador Intel® Core™ Ultra 7 Chipset: SoC integrado Intel® Memoria Memoria, estándar: RAM DDR5-5600 MT/s de 32 GB (2 x 16 GB) Ranuras de memoria: 2 SODIMM; compatible con doble canal Almacenamiento Descripción del disco duro: SSD PCIe® NVMe™ de 1 TB Pantalla y gráficos Monitor: Pantalla WUXGA, IPS, antirreflejante, de 35,6 cm (14\") en diagonal, 300 nits y 45 % de NTSC (1920 x 1200) Gráficos: Gráficos Intel® Arc™ Gráficos: GPU NVIDIA RTX™ A500 para laptops (GDDR6 de 4 GB dedicada) Características de expansión Ubicación del puerto de E/S -Lado izquierdo Puertos 2 USB Type-C® Thunderbolt™ 4 con velocidad de señalización de 40Gb/s (USB Power Delivery, DisplayPort™ 1.4); 2 USB Type-A con velocidad de señalización de 5 Gb/s (1 de carga, 1 de alimentación); 1HDMI2.1; 1conector estéreo para combinación de auriculares y micrófono -Lado derecho Puertos 1 combinación de auriculares y micrófono; 1 USB SuperSpeed Type-A con velocidad de señalización de 5 Gb/s Dimensiones y peso Dimensiones mínimas (anch. x prof. x alt.): 31,57 x 22,44 x 1,92 cm Dimensiones del embalaje (An x F x Al): 483 x 69 x 305 mm Peso: 1,41 kg Garantía 12 meses",
+        "price": "4160.00",
+        "stock": 2,
+        "is_active": true,
+        "created_at": "2025-07-22T13:57:45.862Z",
+        "image_url": "https://demo-sleakops-ecomerce.s3.us-east-1.amazonaws.com/notebook_hp.png"
+    }
+},
+{
+    "model": "product.category",
+    "pk": 1,
+    "fields": {
+        "name": "Celulares",
+        "slug": "phones",
+        "description": ""
+    }
+},
+{
+    "model": "product.category",
+    "pk": 5,
+    "fields": {
+        "name": "Televisores",
+        "slug": "tv",
+        "description": ""
+    }
+},
+{
+    "model": "product.category",
+    "pk": 6,
+    "fields": {
+        "name": "Notebook",
+        "slug": "notebook",
+        "description": ""
+    }
+},
+{
+    "model": "user.user",
+    "pk": 3,
+    "fields": {
+        "password": "pbkdf2_sha256$600000$uHHL468GPpX0NT2yYz90mw$sXLgLYnUWRdvG+BRRqxHtZzxVJGLHF6MEPoS8d57yIA=",
+        "last_login": "2025-07-23T02:03:55.543Z",
+        "is_superuser": true,
+        "username": "admin",
+        "first_name": "Admin",
+        "last_name": "Admin",
+        "email": "admin@sleakops.com",
+        "is_staff": true,
+        "is_active": true,
+        "date_joined": "2025-07-22T00:05:52Z",
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
+    "model": "user.user",
+    "pk": 4,
+    "fields": {
+        "password": "pbkdf2_sha256$600000$SA1meDWpx6aNaTfXKQfTzi$+xm6OA1dKfBl35RcrGdBBCPnmRqoAz0/cjUoFzwklhA=",
+        "last_login": null,
+        "is_superuser": false,
+        "username": "pepe",
+        "first_name": "Jose",
+        "last_name": "Rodriguez",
+        "email": "joserodriguez@mail.com",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2025-07-23T01:46:59Z",
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
+    "model": "user.user",
+    "pk": 5,
+    "fields": {
+        "password": "pbkdf2_sha256$600000$61FoR16MGYsWGCu64qRh4D$FTrl66E0pxamCz7k4gR4k/MJRMI6UbiJWZ6pjzrHBgk=",
+        "last_login": null,
+        "is_superuser": false,
+        "username": "raulfo",
+        "first_name": "Raul",
+        "last_name": "Fonzeca",
+        "email": "raulfonzeca@mail.com",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2025-07-23T01:47:37Z",
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
+    "model": "user.user",
+    "pk": 6,
+    "fields": {
+        "password": "pbkdf2_sha256$600000$oLlF9hkNbfwkYEd3XTxfFN$uLAZ/HpHLszPPLcTkLxWHUYLdMD7IKTX6kNIMXpnLDE=",
+        "last_login": null,
+        "is_superuser": false,
+        "username": "tomaz",
+        "first_name": "Tomas",
+        "last_name": "Perez",
+        "email": "tomasperez@mail.com",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2025-07-23T01:48:47Z",
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
+    "model": "user.user",
+    "pk": 7,
+    "fields": {
+        "password": "pbkdf2_sha256$600000$9GjLMmtfpMuJViQGFjYopR$YSNAGF3F1WYUhD0Knqh7g3W016yJHx9C9iqcWDl5Mm0=",
+        "last_login": null,
+        "is_superuser": false,
+        "username": "Juliavi",
+        "first_name": "Julia",
+        "last_name": "Villegas",
+        "email": "juliavillegas@mail.com",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2025-07-23T01:49:21Z",
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
+    "model": "user.user",
+    "pk": 8,
+    "fields": {
+        "password": "pbkdf2_sha256$600000$bufulh8ddCl1WrNpGsmJ0L$4ka2uE37yoY2yaJc3Dqk+b3M0qt1h8h/f0C7dIAw5yc=",
+        "last_login": null,
+        "is_superuser": false,
+        "username": "luisamoron",
+        "first_name": "Luisa",
+        "last_name": "Moroson",
+        "email": "luisamoroson@mail.com",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2025-07-23T01:50:07Z",
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
+    "model": "order.order",
+    "pk": 1,
+    "fields": {
+        "user": [
+            "pepe"
+        ],
+        "status": "PAID",
+        "created_at": "2025-07-23T01:52:05.608Z",
+        "updated_at": "2025-07-23T01:52:05.608Z"
+    }
+},
+{
+    "model": "order.order",
+    "pk": 2,
+    "fields": {
+        "user": [
+            "pepe"
+        ],
+        "status": "SHIPPED",
+        "created_at": "2025-07-23T01:52:19.028Z",
+        "updated_at": "2025-07-23T01:52:19.028Z"
+    }
+},
+{
+    "model": "order.order",
+    "pk": 3,
+    "fields": {
+        "user": [
+            "Juliavi"
+        ],
+        "status": "CANCELLED",
+        "created_at": "2025-07-23T01:52:37.962Z",
+        "updated_at": "2025-07-23T01:52:37.962Z"
+    }
+},
+{
+    "model": "order.order",
+    "pk": 4,
+    "fields": {
+        "user": [
+            "tomaz"
+        ],
+        "status": "PENDING",
+        "created_at": "2025-07-23T01:52:52.068Z",
+        "updated_at": "2025-07-23T01:52:52.068Z"
+    }
+},
+{
+    "model": "order.order",
+    "pk": 5,
+    "fields": {
+        "user": [
+            "raulfo"
+        ],
+        "status": "PAID",
+        "created_at": "2025-07-23T01:53:10.760Z",
+        "updated_at": "2025-07-23T01:53:10.760Z"
+    }
+},
+{
+    "model": "order.order",
+    "pk": 6,
+    "fields": {
+        "user": [
+            "luisamoron"
+        ],
+        "status": "PENDING",
+        "created_at": "2025-07-23T01:53:32.154Z",
+        "updated_at": "2025-07-23T01:53:32.154Z"
+    }
+},
+{
+    "model": "order.order",
+    "pk": 7,
+    "fields": {
+        "user": [
+            "luisamoron"
+        ],
+        "status": "SHIPPED",
+        "created_at": "2025-07-23T01:53:49.058Z",
+        "updated_at": "2025-07-23T01:53:49.058Z"
+    }
+},
+{
+    "model": "order.order",
+    "pk": 8,
+    "fields": {
+        "user": [
+            "admin"
+        ],
+        "status": "PAID",
+        "created_at": "2025-07-23T02:04:30.728Z",
+        "updated_at": "2025-07-23T02:04:30.728Z"
+    }
+},
+{
+    "model": "cart.cart",
+    "pk": 1,
+    "fields": {
+        "user": [
+            "admin"
+        ],
+        "created_at": "2025-07-22T12:03:14.405Z"
+    }
+}
+]

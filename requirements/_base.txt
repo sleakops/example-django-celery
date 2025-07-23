@@ -11,4 +11,5 @@ django-storages==1.14.2 # Manejar archivos estaticos y media en un bucket de AWS
 
 psycopg2==2.9.9 # Conexion con Postgres
 
-
+django-crispy-forms==2.4
+crispy-bootstrap5==2025.6

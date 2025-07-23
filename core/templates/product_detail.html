@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% block title %}{{ product.name }}{% endblock %}
+{% block content %}
+  <h2>{{ product.name }}</h2>
+
+  {% if product.image_url %}
+  <img class="product-hero" src="{{ product.image_url }}" alt="{{ product.name }}">
+{% endif %}
+  
+  <p><strong>Precio:</strong> ${{ product.price }}</p>
+
+  <form method="post" action="{% url 'add_to_cart' product.id %}">
+    {% csrf_token %}
+    {{ form|crispy }}
+    <button type="submit">Agregar al carrito</button>
+  </form>
+
+  <hr>
+  <h3>Descripcíon:</h3>
+  <p>{{ product.description }}</p>
+{% endblock %}

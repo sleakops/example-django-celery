@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block title %}Resumen del pedido{% endblock %}
+{% block content %}
+  <h2>Pedido #{{ order.id }}</h2>
+  <ul>
+    {% for item in order.items.all %}
+      <li>{{ item.product.name }} (x{{ item.quantity }})</li>
+    {% endfor %}
+  </ul>
+  <p class="total-row"><strong>Total:</strong> ${{ order_total }}</p>
+  <p><strong>Estado:</strong> {{ order.get_status_display }}</p>
+{% endblock %}

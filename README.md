@@ -21,3 +21,22 @@ The Makefile contains a few helpers to make your life easier. Run `make help` to
 port: 8000
 path: /healthcheck/
 status code: 200
+
+## Running as development server
+
+```
+python manage.py runserver 0.0.0:8000
+```
+
+## Running as production server
+
+```
+gunicorn core.wsgi:application --bind 0.0.0:8000 --timeout 120 --log-level info
+```
+
+
+## Generate example fixtures data
+
+```
+python manage.py dumpdata --natural-foreign --indent=4 cart.Cart cart.CartItem order.Order order.OrderItem payment.Payment product.Product product.Category user.User > core/fixtures/initial_data.json
+```
