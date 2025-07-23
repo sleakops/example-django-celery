@@ -86,8 +86,8 @@ WSGI_APPLICATION = 'core.wsgi.application'
 
 DATABASES = {
     'default': {
-        "ENGINE": env.str("DB_ENGINE", "django.db.backends.sqlite3"),
-        "NAME": env.str("DB_NAME", join(ROOT_DIR, "db.sqlite3")),
+        "ENGINE": env.str("DB_ENGINE", "django.db.backends.postgresql_psycopg2"),
+        "NAME": env.str("DB_NAME", 'dbexample'),
         "USER": env.str("DB_USER", "user"),
         "PASSWORD": env.str("DB_PASSWORD", "password"),
         "HOST": env.str("DB_HOST", "localhost"),
@@ -128,7 +128,7 @@ USE_I18N = True
 
 USE_TZ = True
 
-CELERY_ENABLED = env.bool("DJANGO_CELERY_ENABLED", default=True)
+CELERY_ENABLED = env.bool("DJANGO_CELERY_ENABLED", default=False)
 
 if CELERY_ENABLED:
     INSTALLED_APPS += ["django_celery_results"]

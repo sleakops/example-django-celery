@@ -35,6 +35,21 @@ gunicorn core.wsgi:application --bind 0.0.0:8000 --timeout 120 --log-level info
 ```
 
 
+## Commandos utiles
+
+
+Run db migrations: 
+
+```python manage.py migrate --no-input
+```
+
+
+Collect static files:
+
+```python manage.py collectstatic --no-input
+```
+
+
 ## Generate example fixtures data
 
 ```
