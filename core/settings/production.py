@@ -39,6 +39,9 @@ if AWS_STORAGE_ENABLED:
     # ------------------------------------------------------------------------------
     # https://django-storages.readthedocs.io/en/latest/backends/amazon-S3.html#settings
     AWS_STORAGE_BUCKET_NAME = env("DJANGO_AWS_STORAGE_BUCKET_NAME", default="")
+    AWS_DEFAULT_ACL = env(
+        "DJANGO_AWS_DEFAULT_ACL", default="public-read"
+    )
 
     # https://django-storages.readthedocs.io/en/latest/backends/amazon-S3.html#cloudfront
     # AWS_S3_CUSTOM_DOMAIN = env("DJANGO_AWS_S3_CUSTOM_DOMAIN", default=None)

@@ -53,19 +53,22 @@ gunicorn core.wsgi:application --bind 0.0.0:8000 --timeout 120 --log-level info
 
 Run db migrations: 
 
-```python manage.py migrate --no-input
+```
+python manage.py migrate --no-input
 ```
 
 
 Collect static files:
 
-```python manage.py collectstatic --no-input
+```
+python manage.py collectstatic --no-input
 ```
 
 
 ## Comando para levantar data de demo 
 
-```sh ./generate_initial_data.sh
+```
+sh ./generate_initial_data.sh
 ```
 
 
@@ -73,13 +76,14 @@ Collect static files:
 
 Tiene como dependencia RabbitMQ, y se debe configurar las variables de entorno `CELERY_ENABLED` y `CELERY_BROKER_URL`.
 
-```celery -A core.celery worker -l INFO --concurrency 1 --max-tasks-per-child 1 --prefetch-multiplier 1 -n celery@%h
+```
+celery -A core.celery worker -l INFO --concurrency 1 --max-tasks-per-child 1 --prefetch-multiplier 1 -n celery@%h
 ```
 
 
 ## Para configurar el bucket de s3
 
-Se necesita la variable de entorno `DJANGO_AWS_STORAGE_BUCKET_NAME`
+Se necesita la variable de entorno `DJANGO_AWS_STORAGE_BUCKET_NAME` y `DJANGO_AWS_STORAGE_ENABLED`
 
 
 

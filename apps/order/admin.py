@@ -1,9 +1,8 @@
 from .models import Order, OrderItem
 from django.contrib import admin, messages
-# from django.utils.http import urlencode
+from django.utils.http import urlencode
 
-# from apps.base.admin import related_link
-# from apps.client.models import Client
+from apps.base.admin import related_link
 from apps.order.tasks import order_process
 
 
@@ -28,14 +27,10 @@ class OrderItemInline(admin.TabularInline):
 class OrderAdmin(admin.ModelAdmin):
     inlines = [OrderItemInline]
     actions = [process_orders]
-    # list_display = ("id", "source", "client", "created_at")
-    # search_fields = ("client_id",)
-    # list_filter = (
-    #     "source",
-    #     "client",
-    # )
-    # def related_links(self, obj):
-    #     query_param = urlencode({"client_id": f"{obj.id}"})
-    #     return related_link(f"/admin/post/post/?{query_param}", "Posts")
+    list_display = ("id", "user", "created_at", "status", "related_links")
+    search_fields = ("user__first_name", "user__last_name")
+    list_filter = ("status", "user")
 
-admin.site.register(OrderItem)
+    def related_links(self, obj):
+        query_param = urlencode({"order": f"{obj.id}"})
+        return related_link(f"/admin/payment/payment/?{query_param}", "Pagos")
