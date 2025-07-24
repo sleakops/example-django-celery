@@ -134,7 +134,7 @@ if CELERY_ENABLED:
     INSTALLED_APPS += ["django_celery_results"]
     # Celery
     CELERY_BROKER_URL = env.str("CELERY_BROKER_URL")
-    CELERY_RESULT_BACKEND = env.str("CELERY_RESULT_BACKEND")
+    CELERY_RESULT_BACKEND = env.str("CELERY_RESULT_BACKEND", default="django-db")
     CELERY_WORKER_PREFETCH_MULTIPLIER = env.int(
         "CELERY_WORKER_PREFETCH_MULTIPLIER", default=1
     )
