@@ -1,0 +1,84 @@
+# ============================================================
+# Dockerfile for the Flower service
+# Flower is a Celery monitoring web UI (port 5555)
+# Shares the same Django/Celery codebase as core & celeryworker
+# ============================================================
+
+# ------------------------------------------------------------
+# Base image: Python 3.13 slim (cached locally, amd64 compatible)
+# ------------------------------------------------------------
+FROM python:3.13-slim
+
+# ------------------------------------------------------------
+# Build argument to switch between local and production envs
+# Usage:
+#   Local:      docker build --build-arg ENVIRONMENT=local ...
+#   Production: docker build --build-arg ENVIRONMENT=production ...
+# ------------------------------------------------------------
+ARG ENVIRONMENT=local
+
+# ------------------------------------------------------------
+# Environment variables for Python runtime behaviour
+# ------------------------------------------------------------
+ENV PYTHONUNBUFFERED=1 \
+    PYTHONDONTWRITEBYTECODE=1 \
+    PIP_NO_CACHE_DIR=off \
+    PIP_DISABLE_PIP_VERSION_CHECK=1 \
+    ENVIRONMENT=${ENVIRONMENT}
+
+# ------------------------------------------------------------
+# Set working directory
+# ------------------------------------------------------------
+WORKDIR /app
+
+# ------------------------------------------------------------
+# Install OS-level dependencies
+#   build-essential : needed to compile psycopg2 C extensions
+#   git             : required by some pip packages
+#   libpq-dev       : PostgreSQL client headers for psycopg2
+# ------------------------------------------------------------
+RUN apt-get update && apt-get install -y --no-install-recommends \
+        build-essential \
+        git \
+        libpq-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+# ------------------------------------------------------------
+# Copy only requirements files first (layer-cache friendly)
+# ------------------------------------------------------------
+COPY requirements/ /tmp/requirements/
+
+# ------------------------------------------------------------
+# Install Python dependencies based on ENVIRONMENT arg
+#   local       -> requirements/local.txt  (includes debug tools)
+#   production  -> requirements/production.txt (includes gunicorn)
+#   default     -> requirements/local.txt
+# ------------------------------------------------------------
+RUN if [ "$ENVIRONMENT" = "production" ]; then \
+        echo "Installing production dependencies..." && \
+        pip install -r /tmp/requirements/production.txt; \
+    else \
+        echo "Installing local/development dependencies..." && \
+        pip install -r /tmp/requirements/local.txt; \
+    fi \
+    # Clean up temporary requirements files
+    && rm -rf /tmp/requirements
+
+# ------------------------------------------------------------
+# Copy the full application source code into the container
+# ------------------------------------------------------------
+COPY . .
+
+# ------------------------------------------------------------
+# Expose Flower's default web UI port
+# ------------------------------------------------------------
+EXPOSE 5555
+
+# ------------------------------------------------------------
+# Default startup command: launch Flower monitoring UI
+#   -A core.celery    : Celery app reference
+#   --port=5555       : bind to port 5555
+#   --address=0.0.0.0 : accept connections from any interface
+# Override CMD at runtime for different configurations
+# ------------------------------------------------------------
+CMD ["celery", "-A", "core.celery", "flower", "--port=5555", "--address=0.0.0.0"]
