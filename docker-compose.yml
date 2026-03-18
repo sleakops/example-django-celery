@@ -1,92 +1,159 @@
-version: "3.3"
+# ============================================================
+# docker-compose.yml — Local development environment
+# Services: db (PostgreSQL), broker (RabbitMQ), core (Django),
+#           celeryworker (Celery Worker), flower (Celery Monitor)
+# All environment variables are loaded from .env file
+# NOTE: celeryworker and flower reuse the django-example/core:latest
+#       image (same codebase/deps) to avoid redundant builds.
+# ============================================================
+
 services:
+
+  # ------------------------------------------------------------
+  # PostgreSQL 14 — Relational database
+  # Stores Django models and Celery task results (django-db backend)
+  # ------------------------------------------------------------
   db:
     image: postgres:14.1
-    env_file: .env
     container_name: django-example-db
+    env_file:
+      - .env
+    # PostgreSQL requires these specific env vars for initialisation
     environment:
-      - POSTGRES_USER=${DB_USER}
-      - POSTGRES_PASSWORD=${DB_PASSWORD}
-      - POSTGRES_DB=${DB_NAME}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
     ports:
-      - ${DB_PORT}:${DB_PORT}
+      # Host port 5433 avoids conflicts with any local PostgreSQL instance
+      - "5433:5432"
     volumes:
-      - db:/var/lib/postgresql/data
+      # Named volume for persistent database storage
+      - db_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
 
-  # cache:
-  #   image: redis:7.0.0-alpine
-  #   restart: always
-
+  # ------------------------------------------------------------
+  # RabbitMQ 3 — Message broker for Celery tasks
+  # Management UI available at http://localhost:15673
+  # ------------------------------------------------------------
   broker:
-    image: rabbitmq:3-management # AWS MQ, SQS
-    restart: always
+    image: rabbitmq:3-management
     container_name: django-example-broker
+    restart: always
+    env_file:
+      - .env
     environment:
-      - RABBITMQ_DEFAULT_USER=admin
-      - RABBITMQ_DEFAULT_PASS=admin
-      - RABBITMQ_DEFAULT_VHOST=vhost
+      - RABBITMQ_DEFAULT_USER=${RABBITMQ_DEFAULT_USER}
+      - RABBITMQ_DEFAULT_PASS=${RABBITMQ_DEFAULT_PASS}
+      - RABBITMQ_DEFAULT_VHOST=${RABBITMQ_DEFAULT_VHOST}
     ports:
-        - 5672:5672
-        - 15672:15672
+      # AMQP protocol port (used by Celery workers)
+      - "5672:5672"
+      # RabbitMQ management web UI
+      - "15673:15672"
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
+      interval: 15s
+      timeout: 10s
+      retries: 5
+      start_period: 40s
 
+  # ------------------------------------------------------------
+  # Core — Django web application (development server)
+  # Uses pre-built django-example/core:latest image
+  # Runs migrations via docker-entrypoint.sh, then dev server
+  # ------------------------------------------------------------
   core:
-    build:
-      context: .
-      dockerfile: Dockerfile
-      args:
-        ENVIRONMENT: local
-    image: django-example/core
-    command: ./docker-entrypoint.sh
+    image: django-example/core:latest
     container_name: django-example-core
-    env_file: .env
+    env_file:
+      - .env
     stdin_open: true
     tty: true
-    depends_on:
-      - db
-      - broker
-      # - cache
-    volumes:
-      - .:/app
     ports:
+      # Django dev server — host port 8000
       - "8000:8000"
+    depends_on:
+      db:
+        condition: service_healthy
+      broker:
+        condition: service_healthy
+    # Entrypoint waits for DB, runs migrations, then starts dev server
+    command: ./docker-entrypoint.sh
+    healthcheck:
+      # Use Python urllib to check Django admin page (curl not available in slim image)
+      test: ["CMD-SHELL", "python -c \"import urllib.request; urllib.request.urlopen('http://localhost:8000/admin/')\" || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 60s
 
+  # ------------------------------------------------------------
+  # Celery Worker — Processes async tasks from RabbitMQ queue
+  # Reuses django-example/core:latest (same codebase and deps)
+  # No HTTP port exposed — communicates via broker only
+  # ------------------------------------------------------------
   celeryworker:
-    build:
-      context: .
-      dockerfile: Dockerfile
-      args:
-        ENVIRONMENT: local
-    image: django-example/core
+    image: django-example/core:latest
     container_name: django-example-celeryworker
-    platform: linux/x86_64
-    volumes:
-      - .:/app:z
+    platform: linux/amd64
     env_file:
       - .env
     depends_on:
-      - db
-      - broker
-      # - cache
-    command: celery -A core.celery worker -l INFO --concurrency 1 --max-tasks-per-child 1 --prefetch-multiplier 1 -n celery@%h
+      db:
+        condition: service_healthy
+      broker:
+        condition: service_healthy
+    # Launch Celery worker with conservative concurrency settings
+    command: >
+      celery -A core.celery worker
+      -l INFO
+      --concurrency 1
+      --max-tasks-per-child 1
+      --prefetch-multiplier 1
+      -n celery@%h
+    healthcheck:
+      # Ping the Celery worker to verify it is alive and connected to broker
+      test: ["CMD-SHELL", "celery -A core.celery inspect ping -d celery@$$HOSTNAME || exit 1"]
+      interval: 30s
+      timeout: 15s
+      retries: 3
+      start_period: 60s
 
+  # ------------------------------------------------------------
+  # Flower — Celery task monitoring web UI
+  # Reuses django-example/core:latest (flower is installed in deps)
+  # Web UI available at http://localhost:5555
+  # ------------------------------------------------------------
   flower:
-    build:
-      context: .
-      dockerfile: Dockerfile
-      args:
-        ENVIRONMENT: local
-    image: django-example/core
+    image: django-example/core:latest
     container_name: django-example-flower
-    platform: linux/x86_64
-    volumes:
-      - .:/app:z
+    platform: linux/amd64
     env_file:
       - .env
     ports:
+      # Flower monitoring UI — host port 5555
       - "5555:5555"
-    command: celery -A core.celery flower
- 
+    depends_on:
+      broker:
+        condition: service_healthy
+    # Launch Flower bound to all interfaces
+    command: celery -A core.celery flower --port=5555 --address=0.0.0.0
+    healthcheck:
+      # Use Python urllib to check Flower web UI (curl not available in slim image)
+      test: ["CMD-SHELL", "python -c \"import urllib.request; urllib.request.urlopen('http://localhost:5555/')\" || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 45s
 
+# ============================================================
+# Named volumes for persistent data
+# ============================================================
 volumes:
-  db: {}
-  # cache: {}
+  # PostgreSQL data persistence across container restarts
+  db_data:

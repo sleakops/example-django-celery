@@ -1,0 +1,95 @@
+# ============================================================
+# Dockerfile for the celeryworker service
+# Python 3.11 + Django 4.2 + Celery 5.3.6
+# Supports local and production environments via ARG ENVIRONMENT
+# ============================================================
+
+FROM python:3.11-slim
+
+# ------------------------------------------------------------
+# Build argument to switch between local and production setups
+# Usage: docker build --build-arg ENVIRONMENT=production ...
+# ------------------------------------------------------------
+ARG ENVIRONMENT=local
+
+# ------------------------------------------------------------
+# Environment variables:
+# - PYTHONUNBUFFERED: ensures stdout/stderr are flushed immediately (important for logs)
+# - PIP_NO_CACHE_DIR: reduces image size by not caching pip downloads
+# - PIP_DISABLE_PIP_VERSION_CHECK: suppresses pip version warnings
+# - DJANGO_SETTINGS_MODULE: default settings module (overridable at runtime)
+# ------------------------------------------------------------
+ENV PYTHONUNBUFFERED=1 \
+    PIP_NO_CACHE_DIR=off \
+    PIP_DISABLE_PIP_VERSION_CHECK=1 \
+    DJANGO_SETTINGS_MODULE=core.settings.local
+
+# ------------------------------------------------------------
+# Set the working directory inside the container
+# ------------------------------------------------------------
+WORKDIR /app
+
+# ------------------------------------------------------------
+# Install system-level dependencies:
+# - build-essential: required to compile Python C extensions (e.g. psycopg2)
+# - libpq-dev: PostgreSQL client library headers (required by psycopg2)
+# - git: required by some pip packages that reference git repos
+# - telnet: useful for local debugging of broker/db connectivity
+# ------------------------------------------------------------
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends \
+        build-essential \
+        libpq-dev \
+        git \
+        telnet \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
+
+# ------------------------------------------------------------
+# Copy only the requirements files first to leverage Docker layer caching.
+# Dependencies are re-installed only when requirements files change.
+# ------------------------------------------------------------
+COPY requirements/ /tmp/requirements/
+
+# ------------------------------------------------------------
+# Install Python dependencies based on the target environment:
+# - local/development: installs local.txt (includes debug toolbar, etc.)
+# - production (or any other): installs production.txt (includes gunicorn)
+# After installation, clean up the temporary requirements directory.
+# ------------------------------------------------------------
+RUN if [ "$ENVIRONMENT" = "local" ] || [ "$ENVIRONMENT" = "development" ]; then \
+        echo "Installing LOCAL dependencies..." \
+        && pip install -r /tmp/requirements/local.txt; \
+    else \
+        echo "Installing PRODUCTION dependencies..." \
+        && pip install -r /tmp/requirements/production.txt; \
+    fi \
+    && rm -rf /tmp/requirements/
+
+# ------------------------------------------------------------
+# Copy the full application source code into the container
+# ------------------------------------------------------------
+COPY . .
+
+# ------------------------------------------------------------
+# Expose no HTTP port — the celery worker does not serve HTTP traffic.
+# It connects outbound to the broker (RabbitMQ) and database (PostgreSQL).
+# ------------------------------------------------------------
+
+# ------------------------------------------------------------
+# Default startup command: launch the Celery worker
+# - -A core.celery         : Celery app defined in core/celery.py
+# - worker                 : run as a worker process
+# - -l INFO                : log level INFO
+# - --concurrency 1        : number of concurrent worker processes
+# - --max-tasks-per-child 1: recycle worker after N tasks (prevents memory leaks)
+# - --prefetch-multiplier 1: fetch one task at a time per worker
+# - -n celery@%h           : unique worker name using hostname
+# Override CMD at runtime for production tuning (e.g. higher concurrency).
+# ------------------------------------------------------------
+CMD ["celery", "-A", "core.celery", "worker", \
+     "-l", "INFO", \
+     "--concurrency", "1", \
+     "--max-tasks-per-child", "1", \
+     "--prefetch-multiplier", "1", \
+     "-n", "celery@%h"]

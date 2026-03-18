@@ -1,535 +1,310 @@
-# example-django-celery
+# Django Example Project
 
-Complete Django + Celery example with RabbitMQ broker for asynchronous task processing.
+A production-ready Django application with Celery task queue, Flower monitoring, PostgreSQL database, and RabbitMQ message broker.
 
-## Getting Started
+## 🚀 Quick Start
 
 ### Prerequisites
-- Docker and Docker Compose installed
-- Make utility
 
-### Running the Project
+- [Docker](https://docs.docker.com/get-docker/) (v20.10+)
+- [Docker Compose](https://docs.docker.com/compose/install/) (v2.0+)
 
-1. Copy environment file:
-   ```bash
-   cp .env.local .env
-   ```
-
-2. Start all services (Django, PostgreSQL, RabbitMQ, Celery Worker, Flower):
-   ```bash
-   make run
-   ```
-   This will build images on first run and start:
-   - **Django app**: `http://localhost:8000`
-   - **PostgreSQL**: Database on port `5432`
-   - **RabbitMQ**: Broker on port `5672` (Management UI: `http://localhost:15672`)
-   - **Celery Worker**: Background task processor
-   - **Flower**: Task monitoring dashboard at `http://localhost:5555`
-
-3. Create superuser to access Django admin:
-   ```bash
-   make createsuperuser
-   ```
-
-4. Access the application:
-   - **Django Admin**: http://localhost:8000/admin/
-   - **Flower Dashboard**: http://localhost:5555
-
-### Available Make Commands
-
-Run `make help` to see all available commands:
-- `make run` - Start all services
-- `make stop` - Stop all containers
-- `make bash` - Access bash inside core container
-- `make shell` - Access Django shell
-- `make migrate` - Run database migrations
-- `make makemigrations` - Create new migrations
-- `make reset-db` - Reset database (⚠️ deletes all data)
-- `make rebuild-core` - Rebuild core container from scratch
-- `make rebuild-all` - Rebuild everything
-
-## Project Structure
-
-```
-├── apps/
-│   ├── client/          # Client app
-│   │   ├── tasks.py     # Celery tasks definitions
-│   │   ├── admin.py     # Admin actions that trigger tasks
-│   │   └── views.py     # Views (can trigger tasks)
-│   ├── post/            # Post app
-│   └── user/            # User app
-├── core/
-│   ├── celery.py        # Celery configuration
-│   └── settings/        # Django settings
-├── docker-compose.yml   # All services orchestration
-├── Makefile            # Helper commands
-└── .env.local          # Environment variables template
-```
-
----
-
-## How to Install & Configure Celery (Step by Step)
-
-If you want to add Celery to your own Django project, follow these steps:
-
-### Step 1: Install Dependencies
-
-Add to your `requirements/_base.txt` or `requirements.txt`:
-
-```txt
-celery==5.3.6                    # Core Celery library
-django-celery-results==2.5.1     # Optional: Store results in DB
-flower==2.0.1                    # Optional: Monitoring dashboard
-```
-
-**Install:**
-```bash
-pip install -r requirements.txt
-```
-
-### Step 2: Configure Django Settings
-
-Add Celery configuration to `core/settings/base.py`:
-
-```python
-# Celery Configuration
-# https://docs.celeryproject.org/en/stable/django/first-steps-with-django.html
-
-CELERY_BROKER_URL = env.str("CELERY_BROKER_URL")  # RabbitMQ or Redis URL
-CELERY_RESULT_BACKEND = env.str("CELERY_RESULT_BACKEND")  # Optional: "django-db" to store results
-CELERY_WORKER_PREFETCH_MULTIPLIER = env.int("CELERY_WORKER_PREFETCH_MULTIPLIER", default=1)
-CELERY_RESULT_EXTENDED = env.bool("CELERY_RESULT_EXTENDED", default=False)  # Optional: Extended result info
-```
-
-**Important notes:**
-- `CELERY_RESULT_BACKEND` and `CELERY_RESULT_EXTENDED` are **optional** - only needed if you want to store task results in the database
-- If using `django-celery-results`, add `"django_celery_results"` to `INSTALLED_APPS`
-
-Reference: [`core/settings/base.py:138-143`](https://github.com/sleakops/example-django-celery/blob/main/core/settings/base.py#L138)
-
-### Step 3: Create Celery App
-
-Create `core/celery.py`:
-
-```python
-import os
-from celery import Celery
-from django.conf import settings
-
-# Set default Django settings module
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "core.settings.local")
-
-# Create Celery app
-app = Celery("core")
-
-# Load config from Django settings with CELERY_ namespace
-app.config_from_object(settings, namespace="CELERY")
-
-# Auto-discover tasks.py in all Django apps
-app.autodiscover_tasks()
-```
-
-Reference: [`core/celery.py`](https://github.com/sleakops/example-django-celery/blob/main/core/celery.py)
-
-### Step 4: Initialize Celery on Django Startup
-
-Modify `core/__init__.py` to import Celery app:
-
-```python
-# This will make sure the app is always imported when
-# Django starts so that shared_task will use this app.
-from .celery import app as celery_app
-
-__all__ = ('celery_app',)
-```
-
-### Step 5: Define Tasks
-
-Create `tasks.py` in any Django app (e.g., `apps/client/tasks.py`):
-
-```python
-from celery import shared_task
-
-@shared_task
-def my_async_task(param):
-    # Your task logic here
-    print(f"Processing: {param}")
-    return "Task completed"
-```
-
-**Magic:** Celery automatically discovers any `tasks.py` file in your Django apps!
-
-Reference: [`apps/client/tasks.py`](https://github.com/sleakops/example-django-celery/blob/main/apps/client/tasks.py)
-
-### Step 6: Set Environment Variables
-
-Add to your `.env` file:
+### Run the Project
 
 ```bash
-# Celery Configuration
-CELERY_BROKER_URL=amqp://admin:admin@broker:5672/vhost  # RabbitMQ
-# OR
-# CELERY_BROKER_URL=redis://localhost:6379/0  # Redis
+# Clone the repository
+git clone <repository-url>
+cd django-example
 
-CELERY_RESULT_BACKEND=django-db  # Optional: Store results in database
+# Start all services
+docker compose up -d
+
+# Wait for services to initialize (about 30-45 seconds)
+docker compose ps
+
+# View logs
+docker compose logs -f
 ```
 
-### Step 7: Run Celery Worker
+### Access the Services
+
+| Service | URL | Description |
+|---------|-----|-------------|
+| Django App | http://localhost:8000 | Main application |
+| Django Admin | http://localhost:8000/admin/ | Admin panel (credentials: admin/admin) |
+| Flower (Celery Monitor) | http://localhost:5555 | Task queue monitoring |
+| RabbitMQ Management | http://localhost:15672 | Message broker UI (guest/guest) |
+
+## 📁 Project Structure
+
+```
+.
+├── core/                       # Main Django application
+│   ├── settings/              # Environment-specific settings
+│   │   ├── base.py           # Base configuration
+│   │   ├── local.py          # Local development settings
+│   │   └── production.py     # Production settings
+│   ├── celery.py             # Celery configuration
+│   ├── urls.py               # URL routing
+│   └── wsgi.py               # WSGI entry point
+├── apps/                      # Django apps
+│   └── users/                # User management
+├── requirements/              # Python dependencies
+│   ├── base.txt              # Core dependencies
+│   ├── local.txt             # Development extras
+│   └── production.txt        # Production extras
+├── docker-entrypoint.sh       # Container startup script
+├── Dockerfile                 # Main application image
+├── Dockerfile.flower          # Flower monitoring image
+├── docker-compose.yml         # Service orchestration
+├── .env                       # Environment variables
+└── README.md                  # This file
+```
+
+## 🔧 Services Overview
+
+| Service | Image | Port | Purpose |
+|---------|-------|------|---------|
+| **core** | django-example/core | 8000 | Django web application |
+| **celeryworker** | django-example/core | - | Background task worker |
+| **flower** | django-example/flower | 5555 | Celery monitoring UI |
+| **db** | postgres:14 | 5432 | PostgreSQL database |
+| **broker** | rabbitmq:3-management | 5672, 15672 | RabbitMQ message broker |
+
+## 🛠️ Development
+
+### Run Migrations
 
 ```bash
-# Development
-celery -A core.celery worker -l INFO
-
-# Production (with more options)
-celery -A core.celery worker -l INFO --concurrency 4 --max-tasks-per-child 100
+docker compose exec core python manage.py migrate
 ```
 
-**In Docker (see `docker-compose.yml:53-70`):**
-```yaml
-celeryworker:
-  image: django-example/core
-  command: celery -A core.celery worker -l INFO --concurrency 1
-  depends_on:
-    - db
-    - broker
-```
-
-### Step 8: Trigger Tasks
-
-From anywhere in your Django code:
-
-```python
-from apps.client.tasks import my_async_task
-
-# Asynchronous execution (non-blocking)
-task = my_async_task.delay("parameter")
-print(f"Task ID: {task.id}")
-
-# With custom options
-task = my_async_task.apply_async(
-    args=["parameter"],
-    countdown=10,  # Execute after 10 seconds
-)
-```
-
----
-
-## Celery Architecture
-
-This project demonstrates the complete Celery workflow for asynchronous task processing:
-
-```
-Django View/Admin → Celery Task (.delay) → RabbitMQ Broker → Celery Worker → Result Backend (DB)
-```
-
-### Components
-
-#### 1. **Broker (RabbitMQ)** 
-Message broker that queues tasks between Django and workers.
-
-- **Configuration** (`.env.local`):
-  ```bash
-  CELERY_BROKER_URL=amqp://admin:admin@broker:5672/vhost
-  ```
-- **Docker service** (`docker-compose.yml:20-30`): RabbitMQ with management plugin
-- **Ports**: 
-  - `5672` - AMQP protocol
-  - `15672` - Management UI (http://localhost:15672, user: `admin`, pass: `admin`)
-
-#### 2. **Celery App** (`core/celery.py`)
-Main Celery application configuration.
-
-```python
-app = Celery("core")
-app.config_from_object(settings, namespace="CELERY")
-app.autodiscover_tasks()  # Finds tasks.py in all Django apps
-```
-
-- Auto-discovers tasks in `tasks.py` from all registered Django apps
-- Loaded on Django startup via `core/__init__.py:3`
-- Namespace `CELERY_` means all config uses this prefix in `.env`
-
-#### 3. **Tasks** (`apps/client/tasks.py`)
-Asynchronous task definitions using `@shared_task` decorator.
-
-**Example task** (`apps/client/tasks.py:7-17`):
-```python
-@shared_task
-def collect_post_by_client(client_id):
-    client = Client.objects.get(id=client_id)
-    print(f'Request: {client.username}')
-    
-    for i in range(1, 200):
-        Post.objects.create(
-            client=client,
-            source="twitter",
-            description=f"Lorem {i}"
-        )
-```
-
-This task creates 200 posts asynchronously, preventing request timeout.
-
-#### 4. **Result Backend**
-Stores task results and status in database.
-
-- **Configuration** (`.env.local:23`):
-  ```bash
-  CELERY_RESULT_BACKEND="django-db"
-  ```
-- **Package**: `django-celery-results` (installed in `requirements.txt:6`)
-- **Purpose**: Track task status (PENDING, STARTED, SUCCESS, FAILURE) and retrieve results
-
-#### 5. **Celery Worker** (`docker-compose.yml:53-70`)
-Background process that executes tasks from the queue.
-
-```yaml
-celeryworker:
-  command: celery -A core.celery worker -l INFO --concurrency 1
-```
-
-- Runs in separate Docker container
-- Shares same codebase as Django app
-- Configuration:
-  - `--concurrency 1`: Process 1 task at a time
-  - `--max-tasks-per-child 1`: Restart worker after each task (prevents memory leaks)
-  - `--prefetch-multiplier 1`: Don't prefetch tasks
-
-#### 6. **Flower** (`docker-compose.yml:72-87`)
-Real-time monitoring dashboard for Celery.
-
-```yaml
-flower:
-  command: celery -A core.celery flower
-  ports:
-    - "5555:5555"
-```
-
-- **Access**: http://localhost:5555
-- **Features**: Monitor tasks, workers, queue status, task history, and execution times
-
----
-
-## How to Trigger Tasks
-
-### Option 1: From Django Admin (Already Implemented)
-
-The project includes a Django admin action in `apps/client/admin.py:10-19`:
-
-```python
-@admin.action(description="Run collect post task")
-def collect_post(modeladmin, request, queryset):
-    for c in queryset.all():
-        collect_post_by_client.delay(c.id)  # Sends task to broker
-        messages.add_message(
-            request,
-            messages.INFO,
-            f"Run collect post task for client {c.username}",
-        )
-```
-
-**Usage Steps:**
-1. Go to http://localhost:8000/admin/client/client/
-2. Select one or more clients from the list
-3. Choose **"Run collect post task"** from the actions dropdown
-4. Click "Go"
-5. The task is sent to RabbitMQ and processed by Celery worker
-6. Monitor progress in Flower: http://localhost:5555
-
-### Option 2: From a Django View (Code Example)
-
-You can trigger tasks from any Django view. Here's a complete example:
-
-```python
-# apps/client/views.py
-from django.http import JsonResponse
-from celery.result import AsyncResult
-from .tasks import collect_post_by_client
-
-def trigger_collect_posts(request, client_id):
-    """Trigger async task to collect posts for a client"""
-    task = collect_post_by_client.delay(client_id)
-    return JsonResponse({
-        'task_id': task.id,
-        'status': 'Task sent to broker',
-        'client_id': client_id,
-        'monitor_url': f'http://localhost:5555/task/{task.id}'
-    })
-
-def check_task_status(request, task_id):
-    """Check the status of a running task"""
-    task = AsyncResult(task_id)
-    
-    response_data = {
-        'task_id': task_id,
-        'status': task.status,  # PENDING, STARTED, SUCCESS, FAILURE, RETRY
-        'ready': task.ready(),
-    }
-    
-    if task.ready():
-        if task.successful():
-            response_data['result'] = task.result
-        else:
-            response_data['error'] = str(task.info)
-    
-    return JsonResponse(response_data)
-```
-
-**Add to `core/urls.py`:**
-
-```python
-from django.urls import path
-from apps.client import views
-
-urlpatterns = [
-    # ... existing patterns
-    path('api/collect-posts/<int:client_id>/', views.trigger_collect_posts, name='trigger_collect_posts'),
-    path('api/task-status/<str:task_id>/', views.check_task_status, name='check_task_status'),
-]
-```
-
-**Usage:**
-```bash
-# Trigger task
-curl http://localhost:8000/api/collect-posts/1/
-
-# Response:
-# {
-#   "task_id": "a7f3e0b2-5c8d-4e9f-b1a2-3d4e5f6a7b8c",
-#   "status": "Task sent to broker",
-#   "client_id": 1,
-#   "monitor_url": "http://localhost:5555/task/a7f3e0b2-5c8d-4e9f-b1a2-3d4e5f6a7b8c"
-# }
-
-# Check task status
-curl http://localhost:8000/api/task-status/a7f3e0b2-5c8d-4e9f-b1a2-3d4e5f6a7b8c/
-
-# Response:
-# {
-#   "task_id": "a7f3e0b2-5c8d-4e9f-b1a2-3d4e5f6a7b8c",
-#   "status": "SUCCESS",
-#   "ready": true
-# }
-```
-
-### Option 3: From Django Shell
+### Create Superuser
 
 ```bash
-make shell
+docker compose exec core python manage.py createsuperuser
 ```
 
-```python
-from apps.client.tasks import collect_post_by_client
-
-# Trigger task
-task = collect_post_by_client.delay(1)
-print(f"Task ID: {task.id}")
-
-# Check status
-print(f"Status: {task.status}")
-
-# Wait for result (blocking)
-result = task.get(timeout=60)
-```
-
----
-
-## Complete Task Flow Example
-
-Here's what happens when you trigger a task:
-
-1. **User Action**: Admin selects a client and clicks "Run collect post task"
-2. **Django**: Calls `collect_post_by_client.delay(client_id)` (non-blocking)
-3. **Celery**: Serializes task (function name + arguments) and sends to RabbitMQ
-4. **RabbitMQ**: Stores task message in queue
-5. **Celery Worker**: Picks up task from queue and executes `collect_post_by_client()`
-6. **Task Execution**: Creates 200 posts in PostgreSQL database
-7. **Result Storage**: Saves task result/status in `django_celery_results` table
-8. **Monitoring**: View real-time progress in Flower dashboard
-
-**Timing**:
-- Django response: ~50ms (immediately returns after queuing)
-- Task execution: ~5-10 seconds (running in background)
-- Database operations: 200 inserts
-
----
-
-## Environment Configuration
-
-Key Celery settings in `.env.local`:
+### Run Tests
 
 ```bash
-# Celery Configuration
-CELERY_RESULT_BACKEND="django-db"                          # Store results in PostgreSQL
-CELERY_BROKER_URL=amqp://admin:admin@broker:5672/vhost    # RabbitMQ connection
-CELERY_WORKER_CONCURRENCY=1                               # Number of worker processes
-CELERY_WORKER_PREFETCH_MULTIPLIER=1                       # Tasks to prefetch per worker
-CELERY_WORKER_MAX_TASKS_PER_CHILD=10                      # Restart worker after N tasks
+docker compose exec core python manage.py test
 ```
 
----
+### Execute Management Commands
 
-## Monitoring & Debugging
-
-### Flower Dashboard
-Access http://localhost:5555 to:
-- View active workers
-- Monitor task queue
-- Check task execution history
-- See task success/failure rates
-- Inspect individual task details
-
-### RabbitMQ Management UI
-Access http://localhost:15672 (user: `admin`, pass: `admin`) to:
-- View message queues
-- Check connection status
-- Monitor message rates
-- Inspect queue bindings
-
-### Check Celery Worker Logs
 ```bash
-docker logs django-example-celeryworker -f
+# Any Django management command
+docker compose exec core python manage.py <command>
+
+# Examples
+docker compose exec core python manage.py shell
+docker compose exec core python manage.py collectstatic
+docker compose exec core python manage.py makemigrations
 ```
 
-### Check Django Logs
+### View Logs
+
 ```bash
-docker logs django-example-core -f
+# All services
+docker compose logs -f
+
+# Specific service
+docker compose logs -f core
+docker compose logs -f celeryworker
+docker compose logs -f flower
+docker compose logs -f db
+docker compose logs -f broker
 ```
 
----
+### Restart Services
 
-## Troubleshooting
+```bash
+# Restart all
+docker compose restart
 
-**Workers not processing tasks?**
+# Restart specific service
+docker compose restart core
+docker compose restart celeryworker
+```
+
+## 🔐 Environment Variables
+
+Key environment variables (defined in `.env`):
+
+| Variable | Default | Description |
+|----------|---------|-------------|
+| `DJANGO_SECRET_KEY` | auto-generated | Django secret key |
+| `DJANGO_DEBUG` | True | Debug mode (False in production) |
+| `DJANGO_SETTINGS_MODULE` | core.settings.local | Settings module |
+| `DB_NAME` | postgres | Database name |
+| `DB_USER` | postgres | Database user |
+| `DB_PASSWORD` | qwerty123 | Database password |
+| `DB_HOST` | db | Database host |
+| `DB_PORT` | 5432 | Database port |
+| `CELERY_BROKER_URL` | amqp://admin:admin@broker:5672/vhost | RabbitMQ connection |
+| `CELERY_RESULT_BACKEND` | django-db | Task result storage |
+
+## 🏗️ Building Images
+
+### Build All Images
+
+```bash
+docker compose build
+```
+
+### Build Specific Image
+
+```bash
+# Main application
+docker build --build-arg ENVIRONMENT=local -t django-example/core:latest .
+
+# Flower monitoring
+docker build --build-arg ENVIRONMENT=local -f Dockerfile.flower -t django-example/flower:latest .
+```
+
+### Build for Production
+
+```bash
+docker build --build-arg ENVIRONMENT=production -t django-example/core:prod .
+```
+
+## 🧹 Cleanup
+
+```bash
+# Stop all services
+docker compose down
+
+# Stop and remove volumes (⚠️ deletes database data)
+docker compose down -v
+
+# Remove all images
+docker compose down --rmi all
+
+# Clean up unused Docker resources
+docker system prune -f
+```
+
+## 🐛 Troubleshooting
+
+### Services not starting
+
+```bash
+# Check service status
+docker compose ps
+
+# View detailed logs
+docker compose logs <service-name>
+
+# Check for port conflicts
+docker ps
+```
+
+### Database connection issues
+
+```bash
+# Ensure database is healthy
+docker compose ps db
+
+# Check database logs
+docker compose logs db
+
+# Restart database
+docker compose restart db
+```
+
+### Celery worker not processing tasks
+
 ```bash
 # Check worker status
-docker ps | grep celeryworker
+docker compose logs celeryworker
 
 # Restart worker
-docker restart django-example-celeryworker
+docker compose restart celeryworker
+
+# Check Flower for task status
+open http://localhost:5555
 ```
 
-**RabbitMQ connection issues?**
+### Port already in use
+
+If you see "port is already allocated" errors, modify the port mappings in `docker-compose.yml`:
+
+```yaml
+ports:
+  - "8001:8000"  # Use 8001 instead of 8000
+```
+
+## 📦 Dependencies
+
+### Python Packages
+
+Core dependencies are managed through `requirements/`:
+
+- **base.txt**: Django, Celery, psycopg2, gunicorn
+- **local.txt**: Debug toolbar, development tools
+- **production.txt**: Production optimizations
+
+### Add New Dependencies
+
 ```bash
-# Check broker is running
-docker ps | grep broker
+# Add to appropriate requirements file
+echo "package-name==version" >> requirements/base.txt
 
-# Check environment variable
-docker exec django-example-core env | grep CELERY_BROKER_URL
+# Rebuild images
+docker compose build
 ```
 
-**Tasks stuck in PENDING?**
-- Verify worker is running: `docker ps | grep celeryworker`
-- Check worker logs: `docker logs django-example-celeryworker`
-- Ensure broker URL is correct in `.env`
+## 🚀 Production Deployment
 
-**Database errors in tasks?**
-- Check PostgreSQL is running: `docker ps | grep db`
-- Verify database migrations: `make migrate`
+### Environment Setup
+
+1. Update `.env` with production values:
+   ```
+   ENVIRONMENT=production
+   DJANGO_DEBUG=False
+   DJANGO_SECRET_KEY=<strong-secret-key>
+   ```
+
+2. Build production images:
+   ```bash
+   docker build --build-arg ENVIRONMENT=production -t django-example/core:prod .
+   ```
+
+3. Run with production settings:
+   ```bash
+   docker compose -f docker-compose.yml up -d
+   ```
+
+### AWS Managed Services
+
+This project can leverage AWS managed services for production:
+
+| Component | AWS Service |
+|-----------|-------------|
+| PostgreSQL | Amazon RDS |
+| RabbitMQ | Amazon MQ |
+| Cache (if added) | Amazon ElastiCache |
+| File Storage | Amazon S3 |
+
+## 📚 Additional Resources
+
+- [Django Documentation](https://docs.djangoproject.com/)
+- [Celery Documentation](https://docs.celeryq.dev/)
+- [Flower Documentation](https://flower.readthedocs.io/)
+- [Docker Documentation](https://docs.docker.com/)
+
+## 📝 License
+
+[Your License Here]
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Submit a pull request
 
 ---
 
-## Health Check
-
-- **Port**: 8000
-- **Path**: `/healthcheck/` (if implemented)
-- **Expected Status**: 200
+**Note**: This project is configured for local development by default. Always review and update security settings before deploying to production.
