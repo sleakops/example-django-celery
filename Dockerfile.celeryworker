@@ -1,0 +1,108 @@
+# =============================================================================
+# Dockerfile for the celeryworker service
+# Asynchronous task worker using Celery with Django integration
+# Supports both local/development and production environments via ARG ENVIRONMENT
+# =============================================================================
+
+# Base image: Python 3.9.13 (matches project's required Python version)
+FROM python:3.9.13
+
+# Build argument to switch between local and production configurations
+# Values: local | development | production (default: local)
+ARG ENVIRONMENT=local
+
+# -----------------------------------------------------------------------------
+# Environment variables
+# PYTHONUNBUFFERED: Ensures Python output is sent straight to terminal (no buffering)
+# PIP_NO_CACHE_DIR: Disables pip cache to reduce image size
+# PIP_DISABLE_PIP_VERSION_CHECK: Suppresses pip version warnings during builds
+# -----------------------------------------------------------------------------
+ENV PYTHONUNBUFFERED=1 \
+    PIP_NO_CACHE_DIR=off \
+    PIP_DISABLE_PIP_VERSION_CHECK=1
+
+# Set the working directory inside the container
+WORKDIR /app
+
+# -----------------------------------------------------------------------------
+# Copy only the requirements files first to leverage Docker layer caching.
+# This way, dependencies are only re-installed when requirements files change.
+# -----------------------------------------------------------------------------
+COPY requirements/*.txt /tmp/requirements/
+
+# -----------------------------------------------------------------------------
+# Install system and Python dependencies based on the target environment.
+#
+# buildDeps: Packages needed only at build time (removed in production to reduce image size)
+# runDeps:   Packages needed at runtime in all environments
+# localDeps: Extra packages useful only in local/development (e.g. telnet for debugging)
+#
+# For local/development:
+#   - Installs buildDeps + runDeps + localDeps
+#   - Installs Python deps from requirements/local.txt (_base.txt + django-debug-toolbar)
+#
+# For production:
+#   - Installs buildDeps + runDeps only
+#   - Installs Python deps from requirements/production.txt (_base.txt + gunicorn)
+#   - Removes buildDeps after install to keep the image lean
+# -----------------------------------------------------------------------------
+RUN set -x \
+    && buildDeps=" \
+        build-essential \
+    " \
+    && runDeps=" \
+        git \
+    " \
+    && localDeps=" \
+        telnet \
+    " \
+    # Update apt package index
+    && apt-get update \
+    # Install build-time dependencies
+    && apt-get install -y --no-install-recommends $buildDeps \
+    # Install runtime dependencies
+    && apt-get install -y --no-install-recommends $runDeps \
+    # Conditionally install environment-specific packages and Python deps
+    && if [ "$ENVIRONMENT" = "local" ] || [ "$ENVIRONMENT" = "development" ]; then \
+        # Install local debugging tools
+        apt-get install -y --no-install-recommends $localDeps \
+        # Install Python dependencies for local environment (includes django-debug-toolbar)
+        && pip install -r /tmp/requirements/local.txt; \
+    else \
+        # Install Python dependencies for production (includes gunicorn)
+        pip install -r /tmp/requirements/production.txt \
+        # Remove build dependencies to reduce final image size in production
+        && apt-get remove -y $buildDeps; \
+    fi \
+    # Clean up apt cache to reduce image size
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/* \
+    # Remove temporary requirements files
+    && rm -rf /tmp/*
+
+# -----------------------------------------------------------------------------
+# Copy the full application source code into the container.
+# Done after dependency installation to maximize Docker layer cache reuse.
+# -----------------------------------------------------------------------------
+COPY . .
+
+# -----------------------------------------------------------------------------
+# Default startup command for the Celery worker.
+#
+# Flags:
+#   -A core.celery          : Django project's Celery application module
+#   worker                  : Start a Celery worker process
+#   -l INFO                 : Set log level to INFO
+#   --concurrency 1         : Use 1 worker process (suitable for CPU-bound tasks)
+#   --max-tasks-per-child 1 : Restart worker after each task (prevents memory leaks)
+#   --prefetch-multiplier 1 : Fetch only 1 task at a time per worker (fair dispatch)
+#   -n celery@%h            : Worker node name using the hostname
+#
+# Override this CMD in docker-compose or at runtime for production tuning.
+# -----------------------------------------------------------------------------
+CMD ["celery", "-A", "core.celery", "worker", \
+     "-l", "INFO", \
+     "--concurrency", "1", \
+     "--max-tasks-per-child", "1", \
+     "--prefetch-multiplier", "1", \
+     "-n", "celery@%h"]
